@@ -1,21 +1,21 @@
-import { useTheme } from './context/ThemeContext';
+import { Routes, Route } from 'react-router-dom';
+import Layout from './components/layout/Layout';
+import Dashboard from './pages/Dashboard';
+import Eventos from './pages/Eventos';
+import Clientes from './pages/Clientes';
+import Equipos from './pages/Equipos';
+import NotFound from './pages/NotFound';
 
-function App() {
-  const { theme, toggleTheme } = useTheme();
-
+export default function App() {
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-white dark:bg-gray-900 text-gray-900 dark:text-white transition-colors">
-      <h1 className="text-4xl font-bold mb-6">
-        Modo actual: {theme === 'dark' ? '🌙 Oscuro' : '☀️ Claro'}
-      </h1>
-      <button
-        onClick={toggleTheme}
-        className="px-6 py-3 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold transition"
-      >
-        Cambiar tema
-      </button>
-    </div>
+    <Routes>
+      <Route element={<Layout />}>
+        <Route path="/" element={<Dashboard />} />
+        <Route path="/eventos" element={<Eventos />} />
+        <Route path="/clientes" element={<Clientes />} />
+        <Route path="/equipos" element={<Equipos />} />
+        <Route path="*" element={<NotFound />} />
+      </Route>
+    </Routes>
   );
 }
-
-export default App;
