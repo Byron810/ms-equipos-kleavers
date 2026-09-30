@@ -1,5 +1,13 @@
 import { useEffect, useState } from 'react';
-import { Plus, Pencil, Trash2, Search, Calendar as CalendarIcon } from 'lucide-react';
+import { useSearchParams, useNavigate } from 'react-router-dom';
+import {
+  Plus,
+  Pencil,
+  Eye,
+  Search,
+  Calendar as CalendarIcon,
+  Filter,
+} from 'lucide-react';
 import { toast } from 'react-toastify';
 import Card from '../components/ui/Card';
 import Badge from '../components/ui/Badge';
@@ -22,56 +30,102 @@ import {
 const estadoVariants = {
   Confirmado: 'green',
   Pendiente: 'amber',
+  'En Curso': 'blue',
   Finalizado: 'gray',
   Cancelado: 'red',
 };
 
-const emptyForm = { nombre: '', cliente: '', fecha: '', estado: 'Pendiente', ubicacion: '' };
+const emptyForm = {
+  nombre: '',
+  cliente: '',
+  fecha: '',
+  estado: 'Pendiente',
+  costo: 0,
+};
+
+// Formatea número a €X.XXX
+const formatCosto = (n) =>
+  '€' + Number(n).toLocaleString('es-ES', { minimumFractionDigits: 0 });
+
+// Formatea ISO a "15 Nov 2026"
+const formatFecha = (iso) => {
+  if (!iso) return '—';
+  return new Date(iso + 'T00:00:00').toLocaleDateString('es-ES', {
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric',
+  });
+};
 
 export default function Eventos() {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const navigate = useNavigate();
+
   const [data, setData] = useState({ items: [], totalRecords: 0 });
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
-  const [pageSize] = useState(5);
+  const [pageSize, setPageSize] = useState(10);
   const [searchInput, setSearchInput] = useState('');
   const search = useDebounce(searchInput, 400);
 
-  // Modal crear/editar
+  // Filtros
+  const [filterEstado, setFilterEstado] = useState('Todos');
+  const [filterMes, setFilterMes] = useState('');
+
   const [formOpen, setFormOpen] = useState(false);
   const [editing, setEditing] = useState(null);
   const [form, setForm] = useState(emptyForm);
   const [formErrors, setFormErrors] = useState({});
   const [saving, setSaving] = useState(false);
 
-  // Modal eliminar
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [toDelete, setToDelete] = useState(null);
 
+  // Abre el modal si viene ?nuevo=true
+  useEffect(() => {
+    if (searchParams.get('nuevo') === 'true') {
+      setEditing(null);
+      setForm(emptyForm);
+      setFormErrors({});
+      setFormOpen(true);
+      setSearchParams({}, { replace: true });
+    }
+  }, [searchParams, setSearchParams]);
+
   const fetchData = async () => {
     setLoading(true);
     try {
-      const res = await getEventos(page, pageSize, search);
+      const res = await getEventos(page, pageSize, search, {
+        estado: filterEstado,
+        mes: filterMes,
+      });
       setData(res.data);
-    } catch (e) {
-      // interceptor ya muestra el toast
-    } finally {
+    } catch (e) {} finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
     fetchData();
-  }, [page, search]);
+  }, [page, pageSize, search, filterEstado, filterMes]);
 
-  // Reset page al buscar
   useEffect(() => {
     setPage(1);
-  }, [search]);
+  }, [search, filterEstado, filterMes]);
 
   const totalPages = Math.ceil(data.totalRecords / pageSize) || 1;
 
-  /* -------- Crear / Editar -------- */
+  const clearFilters = () => {
+    setSearchInput('');
+    setFilterEstado('Todos');
+    setFilterMes('');
+    setPage(1);
+  };
+
+  const hasActiveFilters =
+    searchInput || filterEstado !== 'Todos' || filterMes;
+
   const openCreate = () => {
     setEditing(null);
     setForm(emptyForm);
@@ -86,7 +140,7 @@ export default function Eventos() {
       cliente: item.cliente,
       fecha: item.fecha,
       estado: item.estado,
-      ubicacion: item.ubicacion,
+      costo: item.costo || 0,
     });
     setFormErrors({});
     setFormOpen(true);
@@ -97,7 +151,7 @@ export default function Eventos() {
     if (!form.nombre.trim()) errors.nombre = 'El nombre es obligatorio';
     if (!form.cliente.trim()) errors.cliente = 'El cliente es obligatorio';
     if (!form.fecha) errors.fecha = 'La fecha es obligatoria';
-    if (!form.ubicacion.trim()) errors.ubicacion = 'La ubicación es obligatoria';
+    if (form.costo < 0) errors.costo = 'Debe ser positivo';
     setFormErrors(errors);
     return Object.keys(errors).length === 0;
   };
@@ -116,14 +170,11 @@ export default function Eventos() {
       }
       setFormOpen(false);
       fetchData();
-    } catch (err) {
-      // el interceptor maneja el toast
-    } finally {
+    } catch (err) {} finally {
       setSaving(false);
     }
   };
 
-  /* -------- Eliminar -------- */
   const openDelete = (item) => {
     setToDelete(item);
     setDeleteOpen(true);
@@ -136,50 +187,80 @@ export default function Eventos() {
       await deleteEvento(toDelete.id);
       toast.success('Evento eliminado');
       setDeleteOpen(false);
-      // Si era el último de la página, retrocede
       if (data.items.length === 1 && page > 1) setPage(page - 1);
       else fetchData();
-    } catch (err) {
-      // interceptor
-    } finally {
+    } catch (err) {} finally {
       setDeleting(false);
     }
   };
 
   return (
     <div className="space-y-4">
-      {/* Header de la página */}
+      {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div>
           <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
             Eventos
           </h1>
-          <p className="text-sm text-gray-500 dark:text-slate-400">
-            Gestiona todos los eventos registrados.
-          </p>
         </div>
-        <Button onClick={openCreate}>
+        <Button onClick={() => navigate('/eventos/crear')}>
           <Plus size={18} />
           Nuevo Evento
         </Button>
       </div>
 
-      {/* Card con tabla */}
-      <Card>
-        {/* Barra de búsqueda */}
+      {/* Card principal */}
+      <Card className="overflow-hidden">
+        {/* Barra de filtros */}
         <div className="p-4 border-b border-gray-200 dark:border-slate-700">
-          <div className="relative max-w-sm">
-            <Search
-              size={18}
-              className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
-            />
+          <div className="flex flex-col lg:flex-row lg:items-center gap-3">
+            {/* Búsqueda */}
+            <div className="relative flex-1 max-w-sm">
+              <Search
+                size={18}
+                className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+              />
+              <input
+                type="text"
+                value={searchInput}
+                onChange={(e) => setSearchInput(e.target.value)}
+                placeholder="Buscar eventos..."
+                className="w-full pl-10 pr-4 py-2 rounded-lg bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 text-sm text-gray-700 dark:text-slate-200 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-teal-500"
+              />
+            </div>
+
+            {/* Filtro Estado */}
+            <select
+              value={filterEstado}
+              onChange={(e) => setFilterEstado(e.target.value)}
+              className="rounded-lg border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm text-gray-700 dark:text-slate-200 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-teal-500"
+            >
+              <option value="Todos">Estado: Todos</option>
+              <option value="Confirmado">Confirmado</option>
+              <option value="Pendiente">Pendiente</option>
+              <option value="En Curso">En Curso</option>
+              <option value="Finalizado">Finalizado</option>
+              <option value="Cancelado">Cancelado</option>
+            </select>
+
+            {/* Filtro Mes */}
             <input
-              type="text"
-              value={searchInput}
-              onChange={(e) => setSearchInput(e.target.value)}
-              placeholder="Buscar por nombre o cliente..."
-              className="w-full pl-10 pr-4 py-2 rounded-lg bg-gray-50 dark:bg-slate-700 border border-gray-200 dark:border-slate-600 text-sm text-gray-700 dark:text-slate-200 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-teal-500"
+              type="month"
+              value={filterMes}
+              onChange={(e) => setFilterMes(e.target.value)}
+              className="rounded-lg border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm text-gray-700 dark:text-slate-200 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-teal-500"
             />
+
+            {/* Limpiar filtros */}
+            {hasActiveFilters && (
+              <button
+                onClick={clearFilters}
+                className="text-sm font-medium text-teal-600 dark:text-teal-400 hover:underline flex items-center gap-1"
+              >
+                <Filter size={14} />
+                Limpiar Filtros
+              </button>
+            )}
           </div>
         </div>
 
@@ -191,13 +272,13 @@ export default function Eventos() {
             icon={CalendarIcon}
             title="No hay eventos"
             description={
-              search
+              hasActiveFilters
                 ? 'No se encontraron eventos con esos criterios.'
                 : 'Comienza creando tu primer evento.'
             }
             action={
-              !search && (
-                <Button onClick={openCreate}>
+              !hasActiveFilters && (
+                <Button onClick={() => navigate('/eventos/crear')}>
                   <Plus size={16} />
                   Crear evento
                 </Button>
@@ -209,14 +290,20 @@ export default function Eventos() {
             {/* Tabla desktop */}
             <div className="hidden md:block overflow-x-auto">
               <table className="w-full text-sm">
-                <thead className="bg-gray-50 dark:bg-slate-700/50 text-gray-600 dark:text-slate-300">
+                <thead className="bg-white dark:bg-slate-800 text-gray-700 dark:text-slate-300 border-b border-gray-200 dark:border-slate-700">
                   <tr>
-                    <th className="text-left px-4 py-3 font-medium">Nombre</th>
+                    <th className="text-left px-4 py-3 font-medium">
+                      Nombre del Evento
+                    </th>
                     <th className="text-left px-4 py-3 font-medium">Cliente</th>
                     <th className="text-left px-4 py-3 font-medium">Fecha</th>
-                    <th className="text-left px-4 py-3 font-medium">Ubicación</th>
                     <th className="text-left px-4 py-3 font-medium">Estado</th>
-                    <th className="text-right px-4 py-3 font-medium">Acciones</th>
+                    <th className="text-left px-4 py-3 font-medium">
+                      Costo Total
+                    </th>
+                    <th className="text-right px-4 py-3 font-medium">
+                      Acciones
+                    </th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-100 dark:divide-slate-700">
@@ -232,15 +319,15 @@ export default function Eventos() {
                         {item.cliente}
                       </td>
                       <td className="px-4 py-3 text-gray-600 dark:text-slate-300">
-                        {item.fecha}
-                      </td>
-                      <td className="px-4 py-3 text-gray-600 dark:text-slate-300">
-                        {item.ubicacion}
+                        {formatFecha(item.fecha)}
                       </td>
                       <td className="px-4 py-3">
                         <Badge variant={estadoVariants[item.estado] || 'gray'}>
                           {item.estado}
                         </Badge>
+                      </td>
+                      <td className="px-4 py-3 font-semibold text-gray-900 dark:text-white">
+                        {formatCosto(item.costo)}
                       </td>
                       <td className="px-4 py-3">
                         <div className="flex justify-end gap-1">
@@ -252,11 +339,11 @@ export default function Eventos() {
                             <Pencil size={16} />
                           </button>
                           <button
-                            onClick={() => openDelete(item)}
-                            className="p-2 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/30 text-red-500 dark:text-red-400"
-                            aria-label="Eliminar"
+                            onClick={() => navigate(`/eventos/${item.id}`)}
+                            className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-600 text-gray-500 dark:text-slate-300"
+                            aria-label="Ver detalle"
                           >
-                            <Trash2 size={16} />
+                            <Eye size={16} />
                           </button>
                         </div>
                       </td>
@@ -279,10 +366,10 @@ export default function Eventos() {
                     </Badge>
                   </div>
                   <p className="text-sm text-gray-600 dark:text-slate-400">
-                    {item.cliente} · {item.fecha}
+                    {item.cliente} · {formatFecha(item.fecha)}
                   </p>
-                  <p className="text-sm text-gray-500 dark:text-slate-500">
-                    📍 {item.ubicacion}
+                  <p className="text-sm font-semibold text-gray-900 dark:text-white">
+                    {formatCosto(item.costo)}
                   </p>
                   <div className="flex justify-end gap-1 pt-2">
                     <button
@@ -292,10 +379,10 @@ export default function Eventos() {
                       <Pencil size={16} />
                     </button>
                     <button
-                      onClick={() => openDelete(item)}
-                      className="p-2 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/30 text-red-500 dark:text-red-400"
+                      onClick={() => navigate(`/eventos/${item.id}`)}
+                      className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-600 text-gray-500 dark:text-slate-300"
                     >
-                      <Trash2 size={16} />
+                      <Eye size={16} />
                     </button>
                   </div>
                 </div>
@@ -309,12 +396,16 @@ export default function Eventos() {
               totalRecords={data.totalRecords}
               pageSize={pageSize}
               onPageChange={setPage}
+              onPageSizeChange={(size) => {
+                setPageSize(size);
+                setPage(1);
+              }}
             />
           </>
         )}
       </Card>
 
-      {/* ===== Modal Crear/Editar ===== */}
+      {/* Modal Crear/Editar */}
       <Modal
         isOpen={formOpen}
         onClose={() => setFormOpen(false)}
@@ -336,7 +427,7 @@ export default function Eventos() {
             value={form.cliente}
             onChange={(e) => setForm({ ...form, cliente: e.target.value })}
             error={formErrors.cliente}
-            placeholder="Ej. Familia García"
+            placeholder="Ej. Lucía García"
           />
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <Input
@@ -358,20 +449,24 @@ export default function Eventos() {
               >
                 <option>Pendiente</option>
                 <option>Confirmado</option>
+                <option>En Curso</option>
                 <option>Finalizado</option>
                 <option>Cancelado</option>
               </select>
             </div>
           </div>
           <Input
-            label="Ubicación"
-            name="ubicacion"
-            value={form.ubicacion}
-            onChange={(e) => setForm({ ...form, ubicacion: e.target.value })}
-            error={formErrors.ubicacion}
-            placeholder="Ej. San José"
+            label="Costo total (€)"
+            name="costo"
+            type="number"
+            min="0"
+            value={form.costo}
+            onChange={(e) =>
+              setForm({ ...form, costo: Number(e.target.value) })
+            }
+            error={formErrors.costo}
+            placeholder="0"
           />
-
           <div className="flex justify-end gap-2 pt-2">
             <Button
               type="button"
@@ -387,7 +482,7 @@ export default function Eventos() {
         </form>
       </Modal>
 
-      {/* ===== Modal Eliminar ===== */}
+      {/* Modal Eliminar */}
       <Modal
         isOpen={deleteOpen}
         onClose={() => setDeleteOpen(false)}
@@ -402,17 +497,10 @@ export default function Eventos() {
           ? Esta acción no se puede deshacer.
         </p>
         <div className="flex justify-end gap-2">
-          <Button
-            variant="secondary"
-            onClick={() => setDeleteOpen(false)}
-          >
+          <Button variant="secondary" onClick={() => setDeleteOpen(false)}>
             Cancelar
           </Button>
-          <Button
-            variant="danger"
-            loading={deleting}
-            onClick={confirmDelete}
-          >
+          <Button variant="danger" loading={deleting} onClick={confirmDelete}>
             Eliminar
           </Button>
         </div>

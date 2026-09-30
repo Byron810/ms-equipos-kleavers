@@ -13,6 +13,7 @@ import {
   ArrowRight,
   Calendar as CalendarIcon,
 } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import Card from '../components/ui/Card';
 import Badge from '../components/ui/Badge';
 
@@ -28,12 +29,12 @@ const alerts = [
   { type: 'error', text: 'Carpas 6×6 — 0 disponibles (Sobre-reservado para 15 Nov).' },
 ];
 
+// Opción B: navegan Y abren modal
 const quickActions = [
-  { label: 'Nuevo Evento', icon: Plus, primary: true },
-  { label: 'Agregar Cliente', icon: UserPlus },
-  { label: 'Ver Inventario', icon: Package },
+  { label: 'Nuevo Evento', icon: Plus, primary: true, to: '/eventos/crear' },
+  { label: 'Agregar Cliente', icon: UserPlus, to: '/clientes?nuevo=true' },
+  { label: 'Ver Inventario', icon: Package, to: '/equipos' },
 ];
-
 const upcomingEvents = [
   { name: 'Boda García-López', date: '15 Nov 2026', status: 'Confirmado', statusColor: 'green' },
   { name: 'Gala Anual BBVA', date: '18 Nov 2026', status: 'Pendiente', statusColor: 'amber' },
@@ -113,9 +114,10 @@ export default function Dashboard() {
               Accesos Rápidos
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-              {quickActions.map(({ label, icon: Icon, primary }) => (
-                <button
+              {quickActions.map(({ label, icon: Icon, primary, to }) => (
+                <Link
                   key={label}
+                  to={to}
                   className={`flex items-center justify-center gap-2 px-4 py-3 rounded-lg font-medium text-sm transition ${
                     primary
                       ? 'bg-teal-600 hover:bg-teal-700 text-white'
@@ -124,7 +126,7 @@ export default function Dashboard() {
                 >
                   <Icon size={18} />
                   {label}
-                </button>
+                </Link>
               ))}
             </div>
           </section>
@@ -137,12 +139,12 @@ export default function Dashboard() {
               <h2 className="font-semibold text-gray-900 dark:text-white">
                 Próximos Eventos
               </h2>
-              <a
-                href="#"
+              <Link
+                to="/eventos"
                 className="text-xs font-medium text-teal-600 dark:text-teal-400 hover:underline flex items-center gap-1"
               >
                 Ver Agenda <ArrowRight size={12} />
-              </a>
+              </Link>
             </div>
 
             <ul className="space-y-3">
