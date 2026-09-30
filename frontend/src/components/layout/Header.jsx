@@ -4,8 +4,6 @@ import { useTheme } from "../../context/ThemeContext";
 import Badge from "../ui/Badge";
 import { useAuth } from "../../context/AuthContext";
 
-const { user, logout } = useAuth();
-
 const mockNotifications = [
   {
     id: 1,
@@ -32,6 +30,7 @@ export default function Header({ title, onToggleSidebar }) {
   const [notifOpen, setNotifOpen] = useState(false);
   const [hasUnread, setHasUnread] = useState(true);
   const notifRef = useRef(null);
+  const { user, logout } = useAuth();
 
   useEffect(() => {
     const handleClickOutside = (e) => {
