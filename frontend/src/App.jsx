@@ -1,17 +1,26 @@
-import { Routes, Route } from 'react-router-dom';
-import Layout from './components/layout/Layout';
-import Dashboard from './pages/Dashboard';
-import Eventos from './pages/Eventos';
-import CrearEvento from './pages/CrearEvento';
-import DetalleEvento from './pages/DetalleEvento';
-import Clientes from './pages/Clientes';
-import Equipos from './pages/Equipos';
-import NotFound from './pages/NotFound';
+import { Routes, Route } from "react-router-dom";
+import Layout from "./components/layout/Layout";
+import ProtectedRoute from "./components/ProtectedRoute";
+import Login from "./pages/Login";
+import Dashboard from "./pages/Dashboard";
+import Eventos from "./pages/Eventos";
+import CrearEvento from "./pages/CrearEvento";
+import DetalleEvento from "./pages/DetalleEvento";
+import Clientes from "./pages/Clientes";
+import Equipos from "./pages/Equipos";
+import NotFound from "./pages/NotFound";
 
 export default function App() {
   return (
     <Routes>
-      <Route element={<Layout />}>
+      <Route path="/login" element={<Login />} />
+      <Route
+        element={
+          <ProtectedRoute>
+            <Layout />
+          </ProtectedRoute>
+        }
+      >
         <Route path="/" element={<Dashboard />} />
         <Route path="/eventos" element={<Eventos />} />
         <Route path="/eventos/crear" element={<CrearEvento />} />
