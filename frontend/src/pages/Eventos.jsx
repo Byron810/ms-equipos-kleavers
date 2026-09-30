@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { useSearchParams, useNavigate } from 'react-router-dom';
+import { useEffect, useState } from "react";
+import { useSearchParams, useNavigate } from "react-router-dom";
 import {
   Plus,
   Pencil,
@@ -7,53 +7,52 @@ import {
   Search,
   Calendar as CalendarIcon,
   Filter,
-} from 'lucide-react';
-import { toast } from 'react-toastify';
-import Card from '../components/ui/Card';
-import Badge from '../components/ui/Badge';
-import Button from '../components/ui/Button';
-import Input from '../components/ui/Input';
-import Modal from '../components/ui/Modal';
-import Spinner from '../components/ui/Spinner';
-import EmptyState from '../components/ui/EmptyState';
-import Pagination from '../components/ui/Pagination';
-import { useDebounce } from '../hooks/useDebounce';
+} from "lucide-react";
+import { toast } from "react-toastify";
+import Card from "../components/ui/Card";
+import Badge from "../components/ui/Badge";
+import Button from "../components/ui/Button";
+import Input from "../components/ui/Input";
+import Modal from "../components/ui/Modal";
+import Spinner from "../components/ui/Spinner";
+import EmptyState from "../components/ui/EmptyState";
+import Pagination from "../components/ui/Pagination";
+import { useDebounce } from "../hooks/useDebounce";
 
-// 🚧 Cambiar a eventosService cuando APIM esté listo
 import {
-  mockGetEventos as getEventos,
-  mockCreateEvento as createEvento,
-  mockUpdateEvento as updateEvento,
-  mockDeleteEvento as deleteEvento,
-} from '../services/mockEventos';
+  getEventos,
+  createEvento,
+  updateEvento,
+  deleteEvento,
+} from "../services/eventosService";
 
 const estadoVariants = {
-  Confirmado: 'green',
-  Pendiente: 'amber',
-  'En Curso': 'blue',
-  Finalizado: 'gray',
-  Cancelado: 'red',
+  Confirmado: "green",
+  Pendiente: "amber",
+  "En Curso": "blue",
+  Finalizado: "gray",
+  Cancelado: "red",
 };
 
 const emptyForm = {
-  nombre: '',
-  cliente: '',
-  fecha: '',
-  estado: 'Pendiente',
+  nombre: "",
+  cliente: "",
+  fecha: "",
+  estado: "Pendiente",
   costo: 0,
 };
 
 // Formatea número a €X.XXX
 const formatCosto = (n) =>
-  '€' + Number(n).toLocaleString('es-ES', { minimumFractionDigits: 0 });
+  "€" + Number(n).toLocaleString("es-ES", { minimumFractionDigits: 0 });
 
 // Formatea ISO a "15 Nov 2026"
 const formatFecha = (iso) => {
-  if (!iso) return '—';
-  return new Date(iso + 'T00:00:00').toLocaleDateString('es-ES', {
-    day: '2-digit',
-    month: 'short',
-    year: 'numeric',
+  if (!iso) return "—";
+  return new Date(iso + "T00:00:00").toLocaleDateString("es-ES", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
   });
 };
 
@@ -65,12 +64,12 @@ export default function Eventos() {
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
-  const [searchInput, setSearchInput] = useState('');
+  const [searchInput, setSearchInput] = useState("");
   const search = useDebounce(searchInput, 400);
 
   // Filtros
-  const [filterEstado, setFilterEstado] = useState('Todos');
-  const [filterMes, setFilterMes] = useState('');
+  const [filterEstado, setFilterEstado] = useState("Todos");
+  const [filterMes, setFilterMes] = useState("");
 
   const [formOpen, setFormOpen] = useState(false);
   const [editing, setEditing] = useState(null);
@@ -84,7 +83,7 @@ export default function Eventos() {
 
   // Abre el modal si viene ?nuevo=true
   useEffect(() => {
-    if (searchParams.get('nuevo') === 'true') {
+    if (searchParams.get("nuevo") === "true") {
       setEditing(null);
       setForm(emptyForm);
       setFormErrors({});
@@ -101,7 +100,8 @@ export default function Eventos() {
         mes: filterMes,
       });
       setData(res.data);
-    } catch (e) {} finally {
+    } catch (e) {
+    } finally {
       setLoading(false);
     }
   };
@@ -117,14 +117,13 @@ export default function Eventos() {
   const totalPages = Math.ceil(data.totalRecords / pageSize) || 1;
 
   const clearFilters = () => {
-    setSearchInput('');
-    setFilterEstado('Todos');
-    setFilterMes('');
+    setSearchInput("");
+    setFilterEstado("Todos");
+    setFilterMes("");
     setPage(1);
   };
 
-  const hasActiveFilters =
-    searchInput || filterEstado !== 'Todos' || filterMes;
+  const hasActiveFilters = searchInput || filterEstado !== "Todos" || filterMes;
 
   const openCreate = () => {
     setEditing(null);
@@ -148,10 +147,10 @@ export default function Eventos() {
 
   const validate = () => {
     const errors = {};
-    if (!form.nombre.trim()) errors.nombre = 'El nombre es obligatorio';
-    if (!form.cliente.trim()) errors.cliente = 'El cliente es obligatorio';
-    if (!form.fecha) errors.fecha = 'La fecha es obligatoria';
-    if (form.costo < 0) errors.costo = 'Debe ser positivo';
+    if (!form.nombre.trim()) errors.nombre = "El nombre es obligatorio";
+    if (!form.cliente.trim()) errors.cliente = "El cliente es obligatorio";
+    if (!form.fecha) errors.fecha = "La fecha es obligatoria";
+    if (form.costo < 0) errors.costo = "Debe ser positivo";
     setFormErrors(errors);
     return Object.keys(errors).length === 0;
   };
@@ -163,14 +162,15 @@ export default function Eventos() {
     try {
       if (editing) {
         await updateEvento(editing.id, form);
-        toast.success('Evento actualizado');
+        toast.success("Evento actualizado");
       } else {
         await createEvento(form);
-        toast.success('Evento creado');
+        toast.success("Evento creado");
       }
       setFormOpen(false);
       fetchData();
-    } catch (err) {} finally {
+    } catch (err) {
+    } finally {
       setSaving(false);
     }
   };
@@ -185,11 +185,12 @@ export default function Eventos() {
     setDeleting(true);
     try {
       await deleteEvento(toDelete.id);
-      toast.success('Evento eliminado');
+      toast.success("Evento eliminado");
       setDeleteOpen(false);
       if (data.items.length === 1 && page > 1) setPage(page - 1);
       else fetchData();
-    } catch (err) {} finally {
+    } catch (err) {
+    } finally {
       setDeleting(false);
     }
   };
@@ -203,7 +204,7 @@ export default function Eventos() {
             Eventos
           </h1>
         </div>
-        <Button onClick={() => navigate('/eventos/crear')}>
+        <Button onClick={() => navigate("/eventos/crear")}>
           <Plus size={18} />
           Nuevo Evento
         </Button>
@@ -273,12 +274,12 @@ export default function Eventos() {
             title="No hay eventos"
             description={
               hasActiveFilters
-                ? 'No se encontraron eventos con esos criterios.'
-                : 'Comienza creando tu primer evento.'
+                ? "No se encontraron eventos con esos criterios."
+                : "Comienza creando tu primer evento."
             }
             action={
               !hasActiveFilters && (
-                <Button onClick={() => navigate('/eventos/crear')}>
+                <Button onClick={() => navigate("/eventos/crear")}>
                   <Plus size={16} />
                   Crear evento
                 </Button>
@@ -322,7 +323,7 @@ export default function Eventos() {
                         {formatFecha(item.fecha)}
                       </td>
                       <td className="px-4 py-3">
-                        <Badge variant={estadoVariants[item.estado] || 'gray'}>
+                        <Badge variant={estadoVariants[item.estado] || "gray"}>
                           {item.estado}
                         </Badge>
                       </td>
@@ -361,7 +362,7 @@ export default function Eventos() {
                     <p className="font-medium text-gray-900 dark:text-white">
                       {item.nombre}
                     </p>
-                    <Badge variant={estadoVariants[item.estado] || 'gray'}>
+                    <Badge variant={estadoVariants[item.estado] || "gray"}>
                       {item.estado}
                     </Badge>
                   </div>
@@ -409,7 +410,7 @@ export default function Eventos() {
       <Modal
         isOpen={formOpen}
         onClose={() => setFormOpen(false)}
-        title={editing ? 'Editar Evento' : 'Nuevo Evento'}
+        title={editing ? "Editar Evento" : "Nuevo Evento"}
         size="lg"
       >
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -476,7 +477,7 @@ export default function Eventos() {
               Cancelar
             </Button>
             <Button type="submit" loading={saving}>
-              {editing ? 'Guardar cambios' : 'Crear evento'}
+              {editing ? "Guardar cambios" : "Crear evento"}
             </Button>
           </div>
         </form>
@@ -490,7 +491,7 @@ export default function Eventos() {
         size="sm"
       >
         <p className="text-sm text-gray-600 dark:text-slate-300 mb-6">
-          ¿Seguro que quieres eliminar el evento{' '}
+          ¿Seguro que quieres eliminar el evento{" "}
           <span className="font-semibold text-gray-900 dark:text-white">
             "{toDelete?.nombre}"
           </span>
