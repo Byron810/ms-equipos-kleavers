@@ -1,16 +1,31 @@
-# React + Vite
+# Kleavers — Frontend (Fase I)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Aplicación web responsive para la gestión de eventos, clientes y equipos.
 
-Currently, two official plugins are available:
+## 🛠️ Tecnologías
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- **React 19** + **Vite**
+- **Tailwind CSS v3** (con `darkMode: 'class'`)
+- **React Router DOM** (navegación)
+- **Axios** (peticiones HTTP)
+- **React Hook Form + Zod** (validación)
+- **React Toastify** (feedback)
+- **Lucide React** (iconos)
+- **TanStack Table** (tablas)
 
-## React Compiler
+## 📦 Instalación local
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+```bash
+# 1. Clonar el repositorio
+git clone https://github.com/nahomyVargasS/ProyectoKleavers.git
+cd ProyectoKleavers/frontend
 
-## Expanding the ESLint configuration
+# 2. Instalar dependencias
+npm install
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+# 3. Crear el archivo .env basado en .env.example
+cp .env.example .env
+# Editar .env con las URLs reales de APIM
+
+# 4. Correr en desarrollo
+npm run dev
