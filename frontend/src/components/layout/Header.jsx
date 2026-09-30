@@ -1,12 +1,30 @@
-import { useState, useRef, useEffect } from 'react';
-import { Search, Bell, Sun, Moon, Menu } from 'lucide-react';
-import { useTheme } from '../../context/ThemeContext';
-import Badge from '../ui/Badge';
+import { useState, useRef, useEffect } from "react";
+import { Search, Bell, Sun, Moon, Menu } from "lucide-react";
+import { useTheme } from "../../context/ThemeContext";
+import Badge from "../ui/Badge";
+import { useAuth } from "../../context/AuthContext";
+
+const { user, logout } = useAuth();
 
 const mockNotifications = [
-  { id: 1, text: 'Proyector HD con stock bajo', time: 'Hace 2h', type: 'warning' },
-  { id: 2, text: 'Boda García-López confirmada', time: 'Hace 5h', type: 'success' },
-  { id: 3, text: 'Carpa 6×6 sobre-reservada para 15 Nov', time: 'Ayer', type: 'error' },
+  {
+    id: 1,
+    text: "Proyector HD con stock bajo",
+    time: "Hace 2h",
+    type: "warning",
+  },
+  {
+    id: 2,
+    text: "Boda García-López confirmada",
+    time: "Hace 5h",
+    type: "success",
+  },
+  {
+    id: 3,
+    text: "Carpa 6×6 sobre-reservada para 15 Nov",
+    time: "Ayer",
+    type: "error",
+  },
 ];
 
 export default function Header({ title, onToggleSidebar }) {
@@ -22,9 +40,9 @@ export default function Header({ title, onToggleSidebar }) {
       }
     };
     if (notifOpen) {
-      document.addEventListener('mousedown', handleClickOutside);
+      document.addEventListener("mousedown", handleClickOutside);
     }
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [notifOpen]);
 
   const handleOpenNotifications = () => {
@@ -49,7 +67,10 @@ export default function Header({ title, onToggleSidebar }) {
 
       <div className="hidden md:flex flex-1 max-w-md">
         <div className="relative w-full">
-          <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+          <Search
+            size={18}
+            className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+          />
           <input
             type="text"
             placeholder="Buscar eventos, equipos..."
@@ -90,11 +111,11 @@ export default function Header({ title, onToggleSidebar }) {
                   >
                     <div
                       className={`w-2 h-2 rounded-full mt-1.5 shrink-0 ${
-                        n.type === 'warning'
-                          ? 'bg-amber-500'
-                          : n.type === 'error'
-                          ? 'bg-red-500'
-                          : 'bg-green-500'
+                        n.type === "warning"
+                          ? "bg-amber-500"
+                          : n.type === "error"
+                            ? "bg-red-500"
+                            : "bg-green-500"
                       }`}
                     />
                     <div className="flex-1 min-w-0">
@@ -121,20 +142,27 @@ export default function Header({ title, onToggleSidebar }) {
           className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-800 text-gray-600 dark:text-slate-300"
           aria-label="Cambiar tema"
         >
-          {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
+          {theme === "dark" ? <Sun size={20} /> : <Moon size={20} />}
         </button>
 
         <div className="hidden sm:flex items-center gap-3 pl-3 ml-2 border-l border-gray-200 dark:border-slate-700">
-          <div className="w-9 h-9 rounded-full bg-teal-600 flex items-center justify-center text-white font-semibold text-sm">
-            AK
-          </div>
+          {user?.picture && (
+            <img
+              src={user.picture}
+              alt={user.name}
+              className="w-9 h-9 rounded-full"
+            />
+          )}
           <div className="text-left">
             <p className="text-sm font-semibold text-gray-900 dark:text-white leading-tight">
-              Admin Kleavers
+              {user?.name || "Usuario"}
             </p>
-            <p className="text-xs text-gray-500 dark:text-slate-400 leading-tight">
-              Coordinador Principal
-            </p>
+            <button
+              onClick={logout}
+              className="text-xs text-teal-600 hover:underline"
+            >
+              Cerrar sesión
+            </button>
           </div>
         </div>
       </div>
