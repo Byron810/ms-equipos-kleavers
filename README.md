@@ -7,7 +7,7 @@ Instituto Tecnológico de Costa Rica — Sede San Carlos
 
 ---
 
-## 📋 Descripción del Proyecto
+##  Descripción del Proyecto
 
 Kleavers resuelve los siguientes problemas de coordinación operativa:
 
@@ -20,7 +20,7 @@ Esta Fase I contempla una aplicación funcional **sin backend real**, utilizando
 
 ---
 
-## ✨ Funcionalidades principales
+##  Funcionalidades principales
 
 - Dashboard con resumen de eventos activos, alertas de disponibilidad y accesos rápidos.
 - CRUD completo de Eventos, Clientes y Equipos, con paginación y búsqueda/filtrado en tablas.
@@ -31,7 +31,7 @@ Esta Fase I contempla una aplicación funcional **sin backend real**, utilizando
 
 ---
 
-## 🖥️ Capturas de Pantalla
+##  Capturas de Pantalla
 
 > ⚠️ **PENDIENTE — Responsable: Persona 2 (Frontend)**
 > Reemplazar esta sección con capturas reales de la aplicación ya desplegada (no del mockup de Figma). Se recomienda incluir al menos: Dashboard, Lista de Eventos, Crear Evento (paso con validación de disponibilidad), y la vista móvil. Formato sugerido:
@@ -40,7 +40,7 @@ Esta Fase I contempla una aplicación funcional **sin backend real**, utilizando
 
 ---
 
-## 🚀 Instrucciones de Despliegue Local
+##  Instrucciones de Despliegue Local
 
 > ⚠️ **PENDIENTE — Responsable: Persona 2 y Persona 3**
 > Completar con los pasos reales del proyecto. Guía de lo que debe incluir esta sección:
@@ -66,7 +66,7 @@ Esta Fase I contempla una aplicación funcional **sin backend real**, utilizando
 
 ---
 
-## 🌐 Aplicación Desplegada
+##  Aplicación Desplegada
 
 > ⚠️ **PENDIENTE — Responsable: Persona 3 (DevOps/Infraestructura)**
 > Agregar el enlace de la aplicación en producción (Azure Static Web Apps) y la versión actual visible en la app, asociada al tag automático de Git.
@@ -76,7 +76,7 @@ Esta Fase I contempla una aplicación funcional **sin backend real**, utilizando
 
 ---
 
-## 📂 Estructura del Repositorio
+##  Estructura del Repositorio
 
 > ⚠️ **PENDIENTE — Responsable: Persona 3**
 > Reemplazar con el árbol real de carpetas del proyecto una vez esté organizado. Ejemplo de formato esperado:
@@ -115,10 +115,10 @@ Esta Fase I contempla una aplicación funcional **sin backend real**, utilizando
 
 ---
 
-## 👥 Créditos
+##  Créditos
 
 **Equipo de desarrollo:**
-Nombre//principalEncargaodDe
+- Nombre//principalEncargaodDe
 - J.Josias Fernandez — Diseño UX/UI y Documentación
 - Byron Jiménez Abarca — Frontend y Patrones UX
 - Nahomy Vargas Solis — Arquitectura, Mock Services y DevOps/CI-CD
@@ -129,7 +129,7 @@ Nombre//principalEncargaodDe
 
 ---
 
-## 📄 Documentación Adicional
+##  Documentación Adicional
 
 - [Informe de Diseño UI/UX](./docs/Informe_Diseno_UIUX_Kleavers.docx)
 - [Documento Formal del Proyecto](./docs/Documento_Formal_Kleavers.docx)
