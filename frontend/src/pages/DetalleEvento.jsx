@@ -1,5 +1,5 @@
-import { useState, useRef, useEffect } from 'react';
-import { useNavigate, useParams, Link } from 'react-router-dom';
+import { useState, useRef, useEffect } from "react";
+import { useNavigate, useParams, Link } from "react-router-dom";
 import {
   ChevronRight,
   Pencil,
@@ -9,71 +9,88 @@ import {
   MapPin,
   Utensils,
   Check,
-} from 'lucide-react';
-import { toast } from 'react-toastify';
-import Card from '../components/ui/Card';
-import Badge from '../components/ui/Badge';
-import Button from '../components/ui/Button';
-import Input from '../components/ui/Input';
-import Modal from '../components/ui/Modal';
+} from "lucide-react";
+import { toast } from "react-toastify";
+import Card from "../components/ui/Card";
+import Badge from "../components/ui/Badge";
+import Button from "../components/ui/Button";
+import Input from "../components/ui/Input";
+import Modal from "../components/ui/Modal";
+import Spinner from "../components/ui/Spinner";
+import { getEvento, updateEvento } from "../services/eventosService";
 
-// 🚧 Datos mock del detalle (más adelante vendrá de APIM)
-const MOCK_DETALLE = {
-  id: 1,
-  nombre: 'Gala Corporativa Anual',
-  estado: 'Confirmado',
-  cliente: 'Tech Solutions SA',
-  fecha: '2026-11-15',
-  lugar: 'Salón Real Ritz',
+// Estas secciones (costos desglosados, catering, estado de pago, historial)
+// todavía no tienen un endpoint propio en APIM. Se muestran como contenido
+// de ejemplo mientras tanto; el resto de la pantalla (nombre, cliente,
+// estado, fecha, lugar, costo total) sí viene de la API real.
+const EXTRA_MOCK = {
   costos: [
-    { concepto: 'Alquiler de Equipos', monto: 2450 },
-    { concepto: 'Servicio de Catering', monto: 4800 },
-    { concepto: 'Personal de Servicio', monto: 1200 },
-    { concepto: 'Montaje y Desmontaje', monto: 800 },
-    { concepto: 'Decoración', monto: 1500 },
+    { concepto: "Alquiler de Equipos", monto: 2450 },
+    { concepto: "Servicio de Catering", monto: 4800 },
+    { concepto: "Personal de Servicio", monto: 1200 },
+    { concepto: "Montaje y Desmontaje", monto: 800 },
+    { concepto: "Decoración", monto: 1500 },
   ],
   pago: {
-    estado: 'Parcialmente Pagado',
+    estado: "Parcialmente Pagado",
     pagado: 6450,
     total: 10750,
     porcentaje: 60,
-    proximoPago: {
-      monto: 2150,
-      vence: '2026-11-01',
-    },
+    proximoPago: { monto: 2150, vence: "2026-11-01" },
   },
   catering: [
-    { nombre: 'Menú Gourmet x 120 personas', detalle: 'Cantidad asignada: 120 pax', precio: 4200 },
-    { nombre: 'Barra de Bebidas Premium', detalle: 'Cantidad asignada: 1 Serv', precio: 400 },
-    { nombre: 'Estación de Postres', detalle: 'Cantidad asignada: 1 Serv', precio: 200 },
+    {
+      nombre: "Menú Gourmet x 120 personas",
+      detalle: "Cantidad asignada: 120 pax",
+      precio: 4200,
+    },
+    {
+      nombre: "Barra de Bebidas Premium",
+      detalle: "Cantidad asignada: 1 Serv",
+      precio: 400,
+    },
+    {
+      nombre: "Estación de Postres",
+      detalle: "Cantidad asignada: 1 Serv",
+      precio: 200,
+    },
   ],
   historial: [
-    { fecha: '2026-09-26', texto: 'Estado cambiado a Confirmado por Admin' },
-    { fecha: '2026-09-20', texto: 'Catering actualizado: +Estación de Postres' },
-    { fecha: '2026-09-15', texto: 'Equipos modificados: +2 Mesas' },
-    { fecha: '2026-09-10', texto: 'Evento creado por María González' },
+    { fecha: "2026-09-26", texto: "Estado cambiado a Confirmado por Admin" },
+    {
+      fecha: "2026-09-20",
+      texto: "Catering actualizado: +Estación de Postres",
+    },
+    { fecha: "2026-09-15", texto: "Equipos modificados: +2 Mesas" },
+    { fecha: "2026-09-10", texto: "Evento creado por María González" },
   ],
 };
 
-const ESTADOS = ['Pendiente', 'Confirmado', 'En Curso', 'Finalizado', 'Cancelado'];
+const ESTADOS = [
+  "Pendiente",
+  "Confirmado",
+  "En Curso",
+  "Finalizado",
+  "Cancelado",
+];
 
 const estadoVariants = {
-  Confirmado: 'green',
-  Pendiente: 'amber',
-  'En Curso': 'blue',
-  Finalizado: 'gray',
-  Cancelado: 'red',
+  Confirmado: "green",
+  Pendiente: "amber",
+  "En Curso": "blue",
+  Finalizado: "gray",
+  Cancelado: "red",
 };
 
 const formatCosto = (n) =>
-  '€' + Number(n).toLocaleString('es-ES', { minimumFractionDigits: 0 });
+  "€" + Number(n || 0).toLocaleString("es-ES", { minimumFractionDigits: 0 });
 
 const formatFecha = (iso) => {
-  if (!iso) return '—';
-  return new Date(iso + 'T00:00:00').toLocaleDateString('es-ES', {
-    day: '2-digit',
-    month: 'short',
-    year: 'numeric',
+  if (!iso) return "—";
+  return new Date(iso + "T00:00:00").toLocaleDateString("es-ES", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
   });
 };
 
@@ -81,8 +98,8 @@ export default function DetalleEvento() {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  // Estado local del evento (para reflejar cambios sin recargar)
-  const [evento, setEvento] = useState(MOCK_DETALLE);
+  const [evento, setEvento] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   // Dropdown de "Cambiar Estado"
   const [estadoOpen, setEstadoOpen] = useState(false);
@@ -91,13 +108,34 @@ export default function DetalleEvento() {
   // Modal de Editar
   const [editOpen, setEditOpen] = useState(false);
   const [form, setForm] = useState({
-    nombre: evento.nombre,
-    cliente: evento.cliente,
-    fecha: evento.fecha,
-    lugar: evento.lugar,
+    nombre: "",
+    cliente: "",
+    fecha: "",
+    lugar: "",
   });
   const [formErrors, setFormErrors] = useState({});
   const [saving, setSaving] = useState(false);
+
+  // Carga el evento real desde APIM
+  useEffect(() => {
+    let active = true;
+    setLoading(true);
+    getEvento(id)
+      .then((res) => {
+        if (!active) return;
+        setEvento({ ...EXTRA_MOCK, ...res.data });
+      })
+      .catch(() => {
+        toast.error("No se pudo cargar el evento");
+        navigate("/eventos");
+      })
+      .finally(() => {
+        if (active) setLoading(false);
+      });
+    return () => {
+      active = false;
+    };
+  }, [id]);
 
   // Cerrar dropdown al hacer clic fuera
   useEffect(() => {
@@ -106,35 +144,46 @@ export default function DetalleEvento() {
         setEstadoOpen(false);
       }
     };
-    if (estadoOpen) document.addEventListener('mousedown', handler);
-    return () => document.removeEventListener('mousedown', handler);
+    if (estadoOpen) document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
   }, [estadoOpen]);
 
-  const totalCostos = evento.costos.reduce((acc, c) => acc + c.monto, 0);
+  if (loading || !evento) {
+    return <Spinner className="py-20" />;
+  }
 
-  /* ===== Cambiar estado ===== */
-  const handleCambiarEstado = (nuevoEstado) => {
+  const totalCostos =
+    evento.costo || evento.costos.reduce((acc, c) => acc + c.monto, 0);
+
+  /* ===== Cambiar estado (real: PUT /eventos/{id}) ===== */
+  const handleCambiarEstado = async (nuevoEstado) => {
     if (nuevoEstado === evento.estado) {
       setEstadoOpen(false);
       return;
     }
+    try {
+      await updateEvento(id, {
+        nombreEvento: evento.nombre,
+        estado: nuevoEstado,
+        fecha: evento.fecha,
+        lugar: evento.lugar,
+      });
 
-    // Simula actualización (en el futuro: updateEvento(id, { estado }))
-    const nuevoHistorial = [
-      {
-        fecha: new Date().toISOString().slice(0, 10),
-        texto: `Estado cambiado a ${nuevoEstado} por Admin`,
-      },
-      ...evento.historial,
-    ];
+      const nuevoHistorial = [
+        {
+          fecha: new Date().toISOString().slice(0, 10),
+          texto: `Estado cambiado a ${nuevoEstado} por Admin`,
+        },
+        ...evento.historial,
+      ];
 
-    setEvento({
-      ...evento,
-      estado: nuevoEstado,
-      historial: nuevoHistorial,
-    });
-    setEstadoOpen(false);
-    toast.success(`Estado cambiado a ${nuevoEstado}`);
+      setEvento({ ...evento, estado: nuevoEstado, historial: nuevoHistorial });
+      setEstadoOpen(false);
+      toast.success(`Estado cambiado a ${nuevoEstado}`);
+    } catch (err) {
+      toast.error("No se pudo cambiar el estado");
+      setEstadoOpen(false);
+    }
   };
 
   /* ===== Editar ===== */
@@ -151,48 +200,49 @@ export default function DetalleEvento() {
 
   const validate = () => {
     const errors = {};
-    if (!form.nombre.trim()) errors.nombre = 'El nombre es obligatorio';
-    if (!form.cliente.trim()) errors.cliente = 'El cliente es obligatorio';
-    if (!form.fecha) errors.fecha = 'La fecha es obligatoria';
-    if (!form.lugar.trim()) errors.lugar = 'El lugar es obligatorio';
+    if (!form.nombre.trim()) errors.nombre = "El nombre es obligatorio";
+    if (!form.cliente.trim()) errors.cliente = "El cliente es obligatorio";
+    if (!form.fecha) errors.fecha = "La fecha es obligatoria";
+    if (!form.lugar.trim()) errors.lugar = "El lugar es obligatorio";
     setFormErrors(errors);
     return Object.keys(errors).length === 0;
   };
 
+  /* ===== Guardar edición (real: PUT /eventos/{id}) ===== */
   const handleGuardarEdicion = async (e) => {
     e.preventDefault();
     if (!validate()) return;
     setSaving(true);
     try {
-      // Simula delay (en el futuro: await updateEvento(id, form))
-      await new Promise((r) => setTimeout(r, 400));
+      await updateEvento(id, {
+        nombreEvento: form.nombre,
+        estado: evento.estado,
+        fecha: form.fecha,
+        lugar: form.lugar,
+      });
 
       const cambios = [];
-      if (form.nombre !== evento.nombre) cambios.push('Nombre');
-      if (form.cliente !== evento.cliente) cambios.push('Cliente');
-      if (form.fecha !== evento.fecha) cambios.push('Fecha');
-      if (form.lugar !== evento.lugar) cambios.push('Lugar');
+      if (form.nombre !== evento.nombre) cambios.push("Nombre");
+      if (form.cliente !== evento.cliente) cambios.push("Cliente");
+      if (form.fecha !== evento.fecha) cambios.push("Fecha");
+      if (form.lugar !== evento.lugar) cambios.push("Lugar");
 
       const nuevoHistorial =
         cambios.length > 0
           ? [
               {
                 fecha: new Date().toISOString().slice(0, 10),
-                texto: `Evento editado: ${cambios.join(', ')}`,
+                texto: `Evento editado: ${cambios.join(", ")}`,
               },
               ...evento.historial,
             ]
           : evento.historial;
 
-      setEvento({
-        ...evento,
-        ...form,
-        historial: nuevoHistorial,
-      });
+      setEvento({ ...evento, ...form, historial: nuevoHistorial });
       setEditOpen(false);
-      toast.success('Evento actualizado');
+      toast.success("Evento actualizado");
     } catch (err) {
-      toast.error('Error al guardar');
+      toast.error("Error al guardar");
     } finally {
       setSaving(false);
     }
@@ -220,7 +270,7 @@ export default function DetalleEvento() {
           <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
             {evento.nombre}
           </h1>
-          <Badge variant={estadoVariants[evento.estado] || 'gray'}>
+          <Badge variant={estadoVariants[evento.estado] || "gray"}>
             {evento.estado}
           </Badge>
         </div>
@@ -248,15 +298,15 @@ export default function DetalleEvento() {
                     <span className="flex items-center gap-2">
                       <span
                         className={`w-2 h-2 rounded-full ${
-                          est === 'Confirmado'
-                            ? 'bg-green-500'
-                            : est === 'Pendiente'
-                            ? 'bg-amber-500'
-                            : est === 'En Curso'
-                            ? 'bg-blue-500'
-                            : est === 'Finalizado'
-                            ? 'bg-gray-400'
-                            : 'bg-red-500'
+                          est === "Confirmado"
+                            ? "bg-green-500"
+                            : est === "Pendiente"
+                              ? "bg-amber-500"
+                              : est === "En Curso"
+                                ? "bg-blue-500"
+                                : est === "Finalizado"
+                                  ? "bg-gray-400"
+                                  : "bg-red-500"
                         }`}
                       />
                       {est}
@@ -420,7 +470,7 @@ export default function DetalleEvento() {
                 Próximo pago solicitado:
               </p>
               <p className="text-lg font-bold text-teal-600 dark:text-teal-400">
-                {formatCosto(evento.pago.proximoPago.monto)} —{' '}
+                {formatCosto(evento.pago.proximoPago.monto)} —{" "}
                 <span className="text-sm font-medium">
                   Vence {formatFecha(evento.pago.proximoPago.vence)}
                 </span>
@@ -442,8 +492,8 @@ export default function DetalleEvento() {
                   <span
                     className={`absolute left-0 top-1.5 w-3 h-3 rounded-full border-2 ${
                       i === 0
-                        ? 'bg-teal-600 border-teal-600'
-                        : 'bg-white dark:bg-slate-800 border-gray-300 dark:border-slate-600'
+                        ? "bg-teal-600 border-teal-600"
+                        : "bg-white dark:bg-slate-800 border-gray-300 dark:border-slate-600"
                     }`}
                   />
                   <p className="text-xs font-medium text-gray-500 dark:text-slate-400 mb-0.5">
