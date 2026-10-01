@@ -163,6 +163,7 @@ export default function CrearEvento() {
 
   /* ========= Submit final (real: POST /eventos) ========= */
   const handleSubmit = async () => {
+    console.log("🔵 handleSubmit se ejecutó, enviando:", form);
     setSaving(true);
     try {
       await createEvento({
