@@ -1,5 +1,5 @@
-import { useEffect, useMemo, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useEffect, useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Check,
   ChevronLeft,
@@ -10,37 +10,86 @@ import {
   Minus,
   Plus,
   CheckCircle2,
-} from 'lucide-react';
-import { toast } from 'react-toastify';
-import Card from '../components/ui/Card';
-import Button from '../components/ui/Button';
-import Input from '../components/ui/Input';
-import Badge from '../components/ui/Badge';
+} from "lucide-react";
+import { toast } from "react-toastify";
+import { createEvento } from "../services/eventosService";
+import Card from "../components/ui/Card";
+import Button from "../components/ui/Button";
+import Input from "../components/ui/Input";
+import Badge from "../components/ui/Badge";
 
 // 🚧 Datos mock de equipos (más adelante vendrán de APIM)
 const EQUIPOS_DISPONIBLES = [
-  { id: 1, nombre: 'Proyector Epson HD', categoria: 'AUDIOVISUAL', disponible: 2, total: 3 },
-  { id: 2, nombre: 'Sistema de Sonido Line Array', categoria: 'AUDIOVISUAL', disponible: 2, total: 3 },
-  { id: 3, nombre: 'Mesa Redonda 1.8m', categoria: 'MOBILIARIO', disponible: 40, total: 50 },
-  { id: 4, nombre: 'Carpas Impermeables 6×6', categoria: 'ESTRUCTURA', disponible: 0, total: 10 },
-  { id: 5, nombre: 'Foco LED RGB Escenario', categoria: 'ILUMINACIÓN', disponible: 12, total: 20 },
-  { id: 6, nombre: 'Escenario Modular 4×3', categoria: 'ESTRUCTURA', disponible: 1, total: 4 },
-  { id: 7, nombre: 'Sillas de Boda Tiffany', categoria: 'MOBILIARIO', disponible: 100, total: 200 },
-  { id: 8, nombre: 'Set de Decoración Floral', categoria: 'DECORACIÓN', disponible: 5, total: 8 },
+  {
+    id: 1,
+    nombre: "Proyector Epson HD",
+    categoria: "AUDIOVISUAL",
+    disponible: 2,
+    total: 3,
+  },
+  {
+    id: 2,
+    nombre: "Sistema de Sonido Line Array",
+    categoria: "AUDIOVISUAL",
+    disponible: 2,
+    total: 3,
+  },
+  {
+    id: 3,
+    nombre: "Mesa Redonda 1.8m",
+    categoria: "MOBILIARIO",
+    disponible: 40,
+    total: 50,
+  },
+  {
+    id: 4,
+    nombre: "Carpas Impermeables 6×6",
+    categoria: "ESTRUCTURA",
+    disponible: 0,
+    total: 10,
+  },
+  {
+    id: 5,
+    nombre: "Foco LED RGB Escenario",
+    categoria: "ILUMINACIÓN",
+    disponible: 12,
+    total: 20,
+  },
+  {
+    id: 6,
+    nombre: "Escenario Modular 4×3",
+    categoria: "ESTRUCTURA",
+    disponible: 1,
+    total: 4,
+  },
+  {
+    id: 7,
+    nombre: "Sillas de Boda Tiffany",
+    categoria: "MOBILIARIO",
+    disponible: 100,
+    total: 200,
+  },
+  {
+    id: 8,
+    nombre: "Set de Decoración Floral",
+    categoria: "DECORACIÓN",
+    disponible: 5,
+    total: 8,
+  },
 ];
 
 const STEPS = [
-  { id: 1, label: 'Cliente y Detalles' },
-  { id: 2, label: 'Equipos' },
-  { id: 3, label: 'Cotización y Resumen' },
+  { id: 1, label: "Cliente y Detalles" },
+  { id: 2, label: "Equipos" },
+  { id: 3, label: "Cotización y Resumen" },
 ];
 
 const emptyForm = {
-  nombre: '',
-  cliente: '',
-  fecha: '',
-  ubicacion: '',
-  estado: 'Pendiente',
+  nombre: "",
+  cliente: "",
+  fecha: "",
+  ubicacion: "",
+  estado: "Pendiente",
 };
 
 export default function CrearEvento() {
@@ -53,7 +102,14 @@ export default function CrearEvento() {
 
   // Cálculo del total simulado (precio ficticio por unidad)
   const preciosUnitarios = {
-    1: 250, 2: 400, 3: 15, 4: 120, 5: 45, 6: 800, 7: 8, 8: 180,
+    1: 250,
+    2: 400,
+    3: 15,
+    4: 120,
+    5: 45,
+    6: 800,
+    7: 8,
+    8: 180,
   };
 
   const totalCotizacion = useMemo(() => {
@@ -63,22 +119,23 @@ export default function CrearEvento() {
   }, [seleccion]);
 
   const formatCosto = (n) =>
-    '€' + Number(n).toLocaleString('es-ES', { minimumFractionDigits: 0 });
+    "€" + Number(n).toLocaleString("es-ES", { minimumFractionDigits: 0 });
 
   /* ========= Validaciones por paso ========= */
   const validateStep1 = () => {
     const errors = {};
-    if (!form.nombre.trim()) errors.nombre = 'El nombre es obligatorio';
-    if (!form.cliente.trim()) errors.cliente = 'El cliente es obligatorio';
-    if (!form.fecha) errors.fecha = 'La fecha es obligatoria';
-    if (!form.ubicacion.trim()) errors.ubicacion = 'La ubicación es obligatoria';
+    if (!form.nombre.trim()) errors.nombre = "El nombre es obligatorio";
+    if (!form.cliente.trim()) errors.cliente = "El cliente es obligatorio";
+    if (!form.fecha) errors.fecha = "La fecha es obligatoria";
+    if (!form.ubicacion.trim())
+      errors.ubicacion = "La ubicación es obligatoria";
     setFormErrors(errors);
     return Object.keys(errors).length === 0;
   };
 
   const validateStep2 = () => {
     if (Object.keys(seleccion).length === 0) {
-      toast.warning('Selecciona al menos un equipo para continuar');
+      toast.warning("Selecciona al menos un equipo para continuar");
       return false;
     }
     return true;
@@ -104,16 +161,23 @@ export default function CrearEvento() {
     });
   };
 
-  /* ========= Submit final ========= */
+  /* ========= Submit final (real: POST /eventos) ========= */
   const handleSubmit = async () => {
     setSaving(true);
     try {
-      // Simula delay
-      await new Promise((r) => setTimeout(r, 500));
-      toast.success('Evento creado correctamente');
-      navigate('/eventos');
+      await createEvento({
+        nombreEvento: form.nombre,
+        clienteNombre: form.cliente,
+        fecha: form.fecha,
+        lugar: form.ubicacion,
+        estado: form.estado,
+        equiposAsignados: Object.keys(seleccion).map(Number),
+        montoTotal: totalCotizacion,
+      });
+      toast.success("Evento creado correctamente");
+      navigate("/eventos");
     } catch (err) {
-      toast.error('Error al crear el evento');
+      toast.error("Error al crear el evento");
     } finally {
       setSaving(false);
     }
@@ -131,12 +195,12 @@ export default function CrearEvento() {
         {form.fecha && (
           <div className="flex items-center gap-2 text-sm text-teal-700 dark:text-teal-400 bg-teal-50 dark:bg-teal-900/20 px-3 py-1.5 rounded-lg">
             <Calendar size={16} />
-            Fecha del evento:{' '}
+            Fecha del evento:{" "}
             <span className="font-semibold">
-              {new Date(form.fecha + 'T00:00:00').toLocaleDateString('es-ES', {
-                day: '2-digit',
-                month: 'short',
-                year: 'numeric',
+              {new Date(form.fecha + "T00:00:00").toLocaleDateString("es-ES", {
+                day: "2-digit",
+                month: "short",
+                year: "numeric",
               })}
             </span>
           </div>
@@ -157,10 +221,10 @@ export default function CrearEvento() {
                       flex items-center justify-center w-8 h-8 rounded-full text-sm font-semibold transition
                       ${
                         isComplete
-                          ? 'bg-teal-600 text-white'
+                          ? "bg-teal-600 text-white"
                           : isActive
-                          ? 'bg-teal-600 text-white'
-                          : 'bg-gray-200 dark:bg-slate-700 text-gray-500 dark:text-slate-400'
+                            ? "bg-teal-600 text-white"
+                            : "bg-gray-200 dark:bg-slate-700 text-gray-500 dark:text-slate-400"
                       }
                     `}
                   >
@@ -169,8 +233,8 @@ export default function CrearEvento() {
                   <span
                     className={`text-sm font-medium hidden sm:block ${
                       isActive || isComplete
-                        ? 'text-gray-900 dark:text-white'
-                        : 'text-gray-500 dark:text-slate-400'
+                        ? "text-gray-900 dark:text-white"
+                        : "text-gray-500 dark:text-slate-400"
                     }`}
                   >
                     {s.label}
@@ -180,8 +244,8 @@ export default function CrearEvento() {
                   <div
                     className={`h-px flex-1 mx-2 ${
                       step > s.id
-                        ? 'bg-teal-600'
-                        : 'bg-gray-200 dark:bg-slate-700'
+                        ? "bg-teal-600"
+                        : "bg-gray-200 dark:bg-slate-700"
                     }`}
                   />
                 )}
@@ -265,10 +329,10 @@ export default function CrearEvento() {
                     relative rounded-xl border-2 p-4 transition
                     ${
                       agotado
-                        ? 'border-red-200 dark:border-red-900/50 opacity-60 bg-red-50/30 dark:bg-red-900/10'
+                        ? "border-red-200 dark:border-red-900/50 opacity-60 bg-red-50/30 dark:bg-red-900/10"
                         : seleccionado
-                        ? 'border-teal-600 bg-teal-50/50 dark:bg-teal-900/10'
-                        : 'border-gray-200 dark:border-slate-700 hover:border-teal-400'
+                          ? "border-teal-600 bg-teal-50/50 dark:bg-teal-900/10"
+                          : "border-gray-200 dark:border-slate-700 hover:border-teal-400"
                     }
                   `}
                 >
@@ -362,8 +426,8 @@ export default function CrearEvento() {
               </p>
               <p className="text-sm font-medium text-gray-900 dark:text-white">
                 {form.fecha &&
-                  new Date(form.fecha + 'T00:00:00').toLocaleDateString(
-                    'es-ES'
+                  new Date(form.fecha + "T00:00:00").toLocaleDateString(
+                    "es-ES",
                   )}
               </p>
             </div>
@@ -383,9 +447,7 @@ export default function CrearEvento() {
           </h3>
           <div className="space-y-2 mb-6">
             {Object.entries(seleccion).map(([id, cant]) => {
-              const eq = EQUIPOS_DISPONIBLES.find(
-                (e) => e.id === Number(id)
-              );
+              const eq = EQUIPOS_DISPONIBLES.find((e) => e.id === Number(id));
               const precio = preciosUnitarios[id] || 0;
               return (
                 <div
@@ -433,10 +495,10 @@ export default function CrearEvento() {
       <div className="flex items-center justify-between gap-3">
         <Button
           variant="secondary"
-          onClick={step === 1 ? () => navigate('/eventos') : prev}
+          onClick={step === 1 ? () => navigate("/eventos") : prev}
         >
           <ChevronLeft size={16} />
-          {step === 1 ? 'Cancelar' : 'Anterior'}
+          {step === 1 ? "Cancelar" : "Anterior"}
         </Button>
 
         {step < 3 ? (
