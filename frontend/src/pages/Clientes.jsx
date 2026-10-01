@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import {
   Plus,
   Pencil,
@@ -9,42 +9,41 @@ import {
   Filter,
   Mail,
   Phone,
-} from 'lucide-react';
-import { toast } from 'react-toastify';
-import Card from '../components/ui/Card';
-import Badge from '../components/ui/Badge';
-import Button from '../components/ui/Button';
-import Input from '../components/ui/Input';
-import Modal from '../components/ui/Modal';
-import Spinner from '../components/ui/Spinner';
-import EmptyState from '../components/ui/EmptyState';
-import Pagination from '../components/ui/Pagination';
-import { useDebounce } from '../hooks/useDebounce';
+} from "lucide-react";
+import { toast } from "react-toastify";
+import Card from "../components/ui/Card";
+import Badge from "../components/ui/Badge";
+import Button from "../components/ui/Button";
+import Input from "../components/ui/Input";
+import Modal from "../components/ui/Modal";
+import Spinner from "../components/ui/Spinner";
+import EmptyState from "../components/ui/EmptyState";
+import Pagination from "../components/ui/Pagination";
+import { useDebounce } from "../hooks/useDebounce";
 
-// 🚧 Cambiar a clientesService cuando APIM esté listo
 import {
-  mockGetClientes as getClientes,
-  mockCreateCliente as createCliente,
-  mockUpdateCliente as updateCliente,
-  mockDeleteCliente as deleteCliente,
-} from '../services/mockClientes';
+  getClientes,
+  createCliente,
+  updateCliente,
+  deleteCliente,
+} from "../services/clientesService";
 
 const emptyForm = {
-  nombre: '',
-  email: '',
-  telefono: '',
-  empresa: '',
-  tipo: 'Particular',
-  estado: 'Activo',
+  nombre: "",
+  email: "",
+  telefono: "",
+  empresa: "",
+  tipo: "Particular",
+  estado: "Activo",
 };
 
 // Formatea fecha ISO a "15 Nov 2026"
 const formatFecha = (iso) => {
-  if (!iso) return '—';
-  return new Date(iso + 'T00:00:00').toLocaleDateString('es-ES', {
-    day: '2-digit',
-    month: 'short',
-    year: 'numeric',
+  if (!iso) return "—";
+  return new Date(iso + "T00:00:00").toLocaleDateString("es-ES", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
   });
 };
 
@@ -55,11 +54,11 @@ export default function Clientes() {
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
-  const [searchInput, setSearchInput] = useState('');
+  const [searchInput, setSearchInput] = useState("");
   const search = useDebounce(searchInput, 400);
 
   // Filtros
-  const [filterTipo, setFilterTipo] = useState('Todos');
+  const [filterTipo, setFilterTipo] = useState("Todos");
 
   const [formOpen, setFormOpen] = useState(false);
   const [editing, setEditing] = useState(null);
@@ -73,7 +72,7 @@ export default function Clientes() {
 
   // Abre el modal si viene ?nuevo=true
   useEffect(() => {
-    if (searchParams.get('nuevo') === 'true') {
+    if (searchParams.get("nuevo") === "true") {
       setEditing(null);
       setForm(emptyForm);
       setFormErrors({});
@@ -89,7 +88,8 @@ export default function Clientes() {
         tipo: filterTipo,
       });
       setData(res.data);
-    } catch (e) {} finally {
+    } catch (e) {
+    } finally {
       setLoading(false);
     }
   };
@@ -105,12 +105,12 @@ export default function Clientes() {
   const totalPages = Math.ceil(data.totalRecords / pageSize) || 1;
 
   const clearFilters = () => {
-    setSearchInput('');
-    setFilterTipo('Todos');
+    setSearchInput("");
+    setFilterTipo("Todos");
     setPage(1);
   };
 
-  const hasActiveFilters = searchInput || filterTipo !== 'Todos';
+  const hasActiveFilters = searchInput || filterTipo !== "Todos";
 
   const openCreate = () => {
     setEditing(null);
@@ -126,8 +126,8 @@ export default function Clientes() {
       email: item.email,
       telefono: item.telefono,
       empresa: item.empresa,
-      tipo: item.tipo || 'Particular',
-      estado: item.estado || 'Activo',
+      tipo: item.tipo || "Particular",
+      estado: item.estado || "Activo",
     });
     setFormErrors({});
     setFormOpen(true);
@@ -135,10 +135,10 @@ export default function Clientes() {
 
   const validate = () => {
     const errors = {};
-    if (!form.nombre.trim()) errors.nombre = 'El nombre es obligatorio';
-    if (!form.email.trim()) errors.email = 'El email es obligatorio';
-    else if (!/\S+@\S+\.\S+/.test(form.email)) errors.email = 'Email inválido';
-    if (!form.telefono.trim()) errors.telefono = 'El teléfono es obligatorio';
+    if (!form.nombre.trim()) errors.nombre = "El nombre es obligatorio";
+    if (!form.email.trim()) errors.email = "El email es obligatorio";
+    else if (!/\S+@\S+\.\S+/.test(form.email)) errors.email = "Email inválido";
+    if (!form.telefono.trim()) errors.telefono = "El teléfono es obligatorio";
     setFormErrors(errors);
     return Object.keys(errors).length === 0;
   };
@@ -150,14 +150,15 @@ export default function Clientes() {
     try {
       if (editing) {
         await updateCliente(editing.id, form);
-        toast.success('Cliente actualizado');
+        toast.success("Cliente actualizado");
       } else {
         await createCliente(form);
-        toast.success('Cliente creado');
+        toast.success("Cliente creado");
       }
       setFormOpen(false);
       fetchData();
-    } catch (err) {} finally {
+    } catch (err) {
+    } finally {
       setSaving(false);
     }
   };
@@ -172,11 +173,12 @@ export default function Clientes() {
     setDeleting(true);
     try {
       await deleteCliente(toDelete.id);
-      toast.success('Cliente eliminado');
+      toast.success("Cliente eliminado");
       setDeleteOpen(false);
       if (data.items.length === 1 && page > 1) setPage(page - 1);
       else fetchData();
-    } catch (err) {} finally {
+    } catch (err) {
+    } finally {
       setDeleting(false);
     }
   };
@@ -249,8 +251,8 @@ export default function Clientes() {
             title="No hay clientes"
             description={
               hasActiveFilters
-                ? 'No se encontraron clientes con esos criterios.'
-                : 'Comienza agregando tu primer cliente.'
+                ? "No se encontraron clientes con esos criterios."
+                : "Comienza agregando tu primer cliente."
             }
             action={
               !hasActiveFilters && (
@@ -269,7 +271,9 @@ export default function Clientes() {
                 <thead className="bg-white dark:bg-slate-800 text-gray-700 dark:text-slate-300 border-b border-gray-200 dark:border-slate-700">
                   <tr>
                     <th className="text-left px-4 py-3 font-medium">Nombre</th>
-                    <th className="text-left px-4 py-3 font-medium">Contacto</th>
+                    <th className="text-left px-4 py-3 font-medium">
+                      Contacto
+                    </th>
                     <th className="text-left px-4 py-3 font-medium">Empresa</th>
                     <th className="text-left px-4 py-3 font-medium">
                       Nº de Eventos
@@ -308,7 +312,8 @@ export default function Clientes() {
                       </td>
                       <td className="px-4 py-3">
                         <Badge variant="teal">
-                          {item.eventos} {item.eventos === 1 ? 'evento' : 'eventos'}
+                          {item.eventos}{" "}
+                          {item.eventos === 1 ? "evento" : "eventos"}
                         </Badge>
                       </td>
                       <td className="px-4 py-3 text-gray-600 dark:text-slate-300">
@@ -347,7 +352,7 @@ export default function Clientes() {
                       {item.nombre}
                     </p>
                     <Badge variant="teal">
-                      {item.eventos} {item.eventos === 1 ? 'evento' : 'eventos'}
+                      {item.eventos} {item.eventos === 1 ? "evento" : "eventos"}
                     </Badge>
                   </div>
                   <p className="text-xs text-gray-500 dark:text-slate-400 flex items-center gap-1.5">
@@ -402,7 +407,7 @@ export default function Clientes() {
       <Modal
         isOpen={formOpen}
         onClose={() => setFormOpen(false)}
-        title={editing ? 'Editar Cliente' : 'Nuevo Cliente'}
+        title={editing ? "Editar Cliente" : "Nuevo Cliente"}
         size="lg"
       >
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -477,7 +482,7 @@ export default function Clientes() {
               Cancelar
             </Button>
             <Button type="submit" loading={saving}>
-              {editing ? 'Guardar cambios' : 'Crear cliente'}
+              {editing ? "Guardar cambios" : "Crear cliente"}
             </Button>
           </div>
         </form>
@@ -491,7 +496,7 @@ export default function Clientes() {
         size="sm"
       >
         <p className="text-sm text-gray-600 dark:text-slate-300 mb-6">
-          ¿Seguro que quieres eliminar el cliente{' '}
+          ¿Seguro que quieres eliminar el cliente{" "}
           <span className="font-semibold text-gray-900 dark:text-white">
             "{toDelete?.nombre}"
           </span>
