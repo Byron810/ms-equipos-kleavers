@@ -1,47 +1,46 @@
-import { useEffect, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
-import { Plus, Pencil, Eye, Search, Package, Filter } from 'lucide-react';
-import { toast } from 'react-toastify';
-import Card from '../components/ui/Card';
-import Badge from '../components/ui/Badge';
-import Button from '../components/ui/Button';
-import Input from '../components/ui/Input';
-import Modal from '../components/ui/Modal';
-import Spinner from '../components/ui/Spinner';
-import EmptyState from '../components/ui/EmptyState';
-import Pagination from '../components/ui/Pagination';
-import { useDebounce } from '../hooks/useDebounce';
+import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
+import { Plus, Pencil, Eye, Search, Package, Filter } from "lucide-react";
+import { toast } from "react-toastify";
+import Card from "../components/ui/Card";
+import Badge from "../components/ui/Badge";
+import Button from "../components/ui/Button";
+import Input from "../components/ui/Input";
+import Modal from "../components/ui/Modal";
+import Spinner from "../components/ui/Spinner";
+import EmptyState from "../components/ui/EmptyState";
+import Pagination from "../components/ui/Pagination";
+import { useDebounce } from "../hooks/useDebounce";
 
-// 🚧 Cambiar a equiposService cuando APIM esté listo
 import {
-  mockGetEquipos as getEquipos,
-  mockCreateEquipo as createEquipo,
-  mockUpdateEquipo as updateEquipo,
-  mockDeleteEquipo as deleteEquipo,
-} from '../services/mockEquipos';
+  getEquipos,
+  createEquipo,
+  updateEquipo,
+  deleteEquipo,
+} from "../services/equiposService";
 
 const CATEGORIAS = [
-  'Video',
-  'Audio',
-  'Mobiliario',
-  'Estructuras',
-  'Iluminación',
-  'Decoración',
+  "Video",
+  "Audio",
+  "Mobiliario",
+  "Estructuras",
+  "Iluminación",
+  "Decoración",
 ];
 
 const estadoVariants = {
-  Disponible: 'green',
-  'En Mantenimiento': 'red',
-  Asignado: 'amber',
+  Disponible: "green",
+  "En Mantenimiento": "red",
+  Asignado: "amber",
 };
 
 const emptyForm = {
-  nombre: '',
-  categoria: 'Video',
+  nombre: "",
+  categoria: "Video",
   cantidad: 0,
   disponible: 0,
   asignado: 0,
-  estado: 'Disponible',
+  estado: "Disponible",
 };
 
 export default function Equipos() {
@@ -51,12 +50,12 @@ export default function Equipos() {
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
-  const [searchInput, setSearchInput] = useState('');
+  const [searchInput, setSearchInput] = useState("");
   const search = useDebounce(searchInput, 400);
 
   // Filtros
-  const [filterCategoria, setFilterCategoria] = useState('Todos');
-  const [filterEstado, setFilterEstado] = useState('Todos');
+  const [filterCategoria, setFilterCategoria] = useState("Todos");
+  const [filterEstado, setFilterEstado] = useState("Todos");
 
   const [formOpen, setFormOpen] = useState(false);
   const [editing, setEditing] = useState(null);
@@ -70,7 +69,7 @@ export default function Equipos() {
 
   // Abre el modal si viene ?nuevo=true
   useEffect(() => {
-    if (searchParams.get('nuevo') === 'true') {
+    if (searchParams.get("nuevo") === "true") {
       setEditing(null);
       setForm(emptyForm);
       setFormErrors({});
@@ -87,7 +86,8 @@ export default function Equipos() {
         estado: filterEstado,
       });
       setData(res.data);
-    } catch (e) {} finally {
+    } catch (e) {
+    } finally {
       setLoading(false);
     }
   };
@@ -103,14 +103,14 @@ export default function Equipos() {
   const totalPages = Math.ceil(data.totalRecords / pageSize) || 1;
 
   const clearFilters = () => {
-    setSearchInput('');
-    setFilterCategoria('Todos');
-    setFilterEstado('Todos');
+    setSearchInput("");
+    setFilterCategoria("Todos");
+    setFilterEstado("Todos");
     setPage(1);
   };
 
   const hasActiveFilters =
-    searchInput || filterCategoria !== 'Todos' || filterEstado !== 'Todos';
+    searchInput || filterCategoria !== "Todos" || filterEstado !== "Todos";
 
   const openCreate = () => {
     setEditing(null);
@@ -135,10 +135,10 @@ export default function Equipos() {
 
   const validate = () => {
     const errors = {};
-    if (!form.nombre.trim()) errors.nombre = 'El nombre es obligatorio';
-    if (form.cantidad < 0) errors.cantidad = 'Debe ser positivo';
-    if (form.disponible < 0) errors.disponible = 'Debe ser positivo';
-    if (form.asignado < 0) errors.asignado = 'Debe ser positivo';
+    if (!form.nombre.trim()) errors.nombre = "El nombre es obligatorio";
+    if (form.cantidad < 0) errors.cantidad = "Debe ser positivo";
+    if (form.disponible < 0) errors.disponible = "Debe ser positivo";
+    if (form.asignado < 0) errors.asignado = "Debe ser positivo";
     setFormErrors(errors);
     return Object.keys(errors).length === 0;
   };
@@ -150,14 +150,15 @@ export default function Equipos() {
     try {
       if (editing) {
         await updateEquipo(editing.id, form);
-        toast.success('Equipo actualizado');
+        toast.success("Equipo actualizado");
       } else {
         await createEquipo(form);
-        toast.success('Equipo creado');
+        toast.success("Equipo creado");
       }
       setFormOpen(false);
       fetchData();
-    } catch (err) {} finally {
+    } catch (err) {
+    } finally {
       setSaving(false);
     }
   };
@@ -172,11 +173,12 @@ export default function Equipos() {
     setDeleting(true);
     try {
       await deleteEquipo(toDelete.id);
-      toast.success('Equipo eliminado');
+      toast.success("Equipo eliminado");
       setDeleteOpen(false);
       if (data.items.length === 1 && page > 1) setPage(page - 1);
       else fetchData();
-    } catch (err) {} finally {
+    } catch (err) {
+    } finally {
       setDeleting(false);
     }
   };
@@ -264,8 +266,8 @@ export default function Equipos() {
             title="No hay equipos"
             description={
               hasActiveFilters
-                ? 'No se encontraron equipos con esos criterios.'
-                : 'Comienza agregando tu primer equipo.'
+                ? "No se encontraron equipos con esos criterios."
+                : "Comienza agregando tu primer equipo."
             }
             action={
               !hasActiveFilters && (
@@ -325,8 +327,8 @@ export default function Equipos() {
                         <span
                           className={`font-semibold ${
                             item.disponible === 0
-                              ? 'text-red-500'
-                              : 'text-gray-900 dark:text-white'
+                              ? "text-red-500"
+                              : "text-gray-900 dark:text-white"
                           }`}
                         >
                           {item.disponible}
@@ -336,7 +338,7 @@ export default function Equipos() {
                         {item.asignado}
                       </td>
                       <td className="px-4 py-3">
-                        <Badge variant={estadoVariants[item.estado] || 'gray'}>
+                        <Badge variant={estadoVariants[item.estado] || "gray"}>
                           {item.estado}
                         </Badge>
                       </td>
@@ -374,7 +376,7 @@ export default function Equipos() {
                     <p className="font-medium text-gray-900 dark:text-white">
                       {item.nombre}
                     </p>
-                    <Badge variant={estadoVariants[item.estado] || 'gray'}>
+                    <Badge variant={estadoVariants[item.estado] || "gray"}>
                       {item.estado}
                     </Badge>
                   </div>
@@ -382,16 +384,16 @@ export default function Equipos() {
                     {item.categoria}
                   </span>
                   <p className="text-sm text-gray-600 dark:text-slate-400">
-                    Total: {item.cantidad} · Disponibles:{' '}
+                    Total: {item.cantidad} · Disponibles:{" "}
                     <span
                       className={
                         item.disponible === 0
-                          ? 'text-red-500 font-semibold'
-                          : 'font-semibold'
+                          ? "text-red-500 font-semibold"
+                          : "font-semibold"
                       }
                     >
                       {item.disponible}
-                    </span>{' '}
+                    </span>{" "}
                     · Asignados: {item.asignado}
                   </p>
                   <div className="flex justify-end gap-1 pt-2">
@@ -432,7 +434,7 @@ export default function Equipos() {
       <Modal
         isOpen={formOpen}
         onClose={() => setFormOpen(false)}
-        title={editing ? 'Editar Equipo' : 'Agregar Equipo'}
+        title={editing ? "Editar Equipo" : "Agregar Equipo"}
         size="lg"
       >
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -516,7 +518,7 @@ export default function Equipos() {
               Cancelar
             </Button>
             <Button type="submit" loading={saving}>
-              {editing ? 'Guardar cambios' : 'Agregar equipo'}
+              {editing ? "Guardar cambios" : "Agregar equipo"}
             </Button>
           </div>
         </form>
@@ -530,7 +532,7 @@ export default function Equipos() {
         size="sm"
       >
         <p className="text-sm text-gray-600 dark:text-slate-300 mb-6">
-          ¿Seguro que quieres eliminar el equipo{' '}
+          ¿Seguro que quieres eliminar el equipo{" "}
           <span className="font-semibold text-gray-900 dark:text-white">
             "{toDelete?.nombre}"
           </span>
