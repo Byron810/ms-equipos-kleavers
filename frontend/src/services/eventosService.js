@@ -1,19 +1,14 @@
 import api from "./api";
+import { getClientesMap } from "./clientesService";
 
-/**
- * El mock de APIM devuelve campos más detallados de lo que la interfaz
- * necesita (nombreEvento, clienteId, montoTotal, etc.). Esta función
- * traduce la respuesta de APIM al formato que espera la UI.
- */
-function mapEvento(e) {
+function mapEvento(e, clientesMap = {}) {
   return {
     id: e.id,
     nombre: e.nombreEvento,
-    cliente: e.clienteNombre || `Cliente #${e.clienteId}`,
+    cliente: clientesMap[e.clienteId] || `Cliente #${e.clienteId}`,
     fecha: e.fecha,
     estado: e.estado,
     costo: e.montoTotal,
-    // se conservan por si se necesitan en el detalle del evento
     lugar: e.lugar,
     horaInicio: e.horaInicio,
     horaFin: e.horaFin,
@@ -22,26 +17,28 @@ function mapEvento(e) {
   };
 }
 
-/**
- * Lista eventos con paginación y búsqueda.
- * Espera respuesta: { totalRecords, page, pageSize, items: [...] }
- */
 export const getEventos = async (page = 1, pageSize = 10, search = "") => {
-  const res = await api.get("/eventos", { params: { page, pageSize, search } });
+  const [res, clientesMap] = await Promise.all([
+    api.get("/eventos", { params: { page, pageSize, search } }),
+    getClientesMap(),
+  ]);
   return {
     ...res,
     data: {
       totalRecords: res.data.totalRecords,
       page: res.data.page,
       pageSize: res.data.pageSize,
-      items: (res.data.items || []).map(mapEvento),
+      items: (res.data.items || []).map((e) => mapEvento(e, clientesMap)),
     },
   };
 };
 
 export const getEvento = async (id) => {
-  const res = await api.get(`/eventos/${id}`);
-  return { ...res, data: mapEvento(res.data) };
+  const [res, clientesMap] = await Promise.all([
+    api.get(`/eventos/${id}`),
+    getClientesMap(),
+  ]);
+  return { ...res, data: mapEvento(res.data, clientesMap) };
 };
 
 export const createEvento = (data) => api.post("/eventos", data);
