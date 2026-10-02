@@ -70,27 +70,10 @@ Esta Fase I contempla una aplicación funcional **sin backend real**, utilizando
 ##  Aplicación Desplegada
 
 - **URL de producción:** https://zealous-coast-0924c7910.6.azurestaticapps.net/
-- **Versión actual:** v0.0.0 
+- **Versión actual:** v1.0.0 
 
 ---
 
-##  Estructura del Repositorio
-
-```
-(pegar aquí la salida real de: tree /F /A frontend\src, corrido desde la raíz del repo)
-```
-
----
-
-##  Aplicación Desplegada
-
-> ⚠️ **PENDIENTE — Responsable: Persona 3 (DevOps/Infraestructura)**
-> Agregar el enlace de la aplicación en producción (Azure Static Web Apps) y la versión actual visible en la app, asociada al tag automático de Git.
->
-> - **URL de producción:** `[pendiente]`
-> - **Versión actual:** `[pendiente — ej. v1.2.0]`
-
----
 
 ##  Estructura del Repositorio
 
