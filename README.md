@@ -7,7 +7,7 @@ Instituto Tecnológico de Costa Rica — Sede San Carlos
 
 ---
 
-##  Descripción del Proyecto
+## Descripción del Proyecto
 
 Kleavers resuelve los siguientes problemas de coordinación operativa:
 
@@ -20,7 +20,7 @@ Esta Fase I contempla una aplicación funcional **sin backend real**, utilizando
 
 ---
 
-##  Funcionalidades principales
+## Funcionalidades principales
 
 - Dashboard con resumen de eventos activos, alertas de disponibilidad y accesos rápidos.
 - CRUD completo de Eventos, Clientes y Equipos, con paginación y búsqueda/filtrado en tablas.
@@ -31,7 +31,7 @@ Esta Fase I contempla una aplicación funcional **sin backend real**, utilizando
 
 ---
 
-##  Capturas de Pantalla
+## Capturas de Pantalla
 
 ### Dashboard
 ![Dashboard](docs/screenshots/dashboard.png)
@@ -39,7 +39,7 @@ Esta Fase I contempla una aplicación funcional **sin backend real**, utilizando
 ### Lista de Eventos
 ![Lista de Eventos](docs/screenshots/eventos.png)
 
-### Crear Evento — Validación de disponibilidad
+### Crear Evento
 ![Crear Evento](docs/screenshots/crearevento.png)
 
 ### Vista Móvil
@@ -47,7 +47,7 @@ Esta Fase I contempla una aplicación funcional **sin backend real**, utilizando
 
 ---
 
-##  Instrucciones de Despliegue Local
+## Instrucciones de Despliegue Local
 
 ```
 1. Clonar el repositorio
@@ -74,15 +74,26 @@ Esta Fase I contempla una aplicación funcional **sin backend real**, utilizando
 
 ---
 
-##  Aplicación Desplegada
+## Aplicación Desplegada
 
 - **URL de producción:** https://zealous-coast-0924c7910.6.azurestaticapps.net/
-- **Versión actual:** v1.0.0 
+- **Versión actual:** v1.0.0
+
+La versión mostrada en el Dashboard se inyecta automáticamente desde el tag de Git generado por el pipeline de GitHub Actions en cada despliegue.
 
 ---
 
+## Estructura del Repositorio
 
-##  Estructura del Repositorio
+```
+/
+├── .github/workflows/     → Pipelines de CI/CD (GitHub Actions)
+├── docs/                  → Documentación, wireframes, diagramas, capturas
+├── frontend/              → Código fuente de la aplicación (ver detalle abajo)
+└── README.md
+```
+
+**Detalle de `frontend/`:**
 
 ```
 frontend/
@@ -133,12 +144,21 @@ frontend/
 └── package.json
 ```
 
-## 🛠️ Tecnologías y Herramientas Utilizadas
+---
+
+## Tecnologías y Herramientas Utilizadas
 
 | Categoría | Herramienta |
 |---|---|
 | Diseño UI/UX | Figma |
-| Frontend | *(pendiente — Persona 2: framework/librería utilizada)* |
+| Frontend | React 19 + Vite |
+| Enrutamiento | React Router DOM |
+| Estilos | Tailwind CSS v3 (modo oscuro nativo con `darkMode: 'class'`) |
+| Cliente HTTP | Axios |
+| Formularios y validación | React Hook Form + Zod |
+| Notificaciones | React Toastify |
+| Íconos | Lucide React |
+| Tablas | TanStack Table |
 | Mock Services | Azure API Management (Consumption) |
 | Autenticación | Google Auth |
 | Hosting | Azure Static Web Apps |
@@ -147,18 +167,14 @@ frontend/
 | Pruebas de API | Postman |
 | Gestión de ramas/commits | SourceTree |
 
-> ⚠️ **PENDIENTE — Responsable: Persona 2**
-> Completar la fila de "Frontend" con el framework/librería real utilizada (ej. React, Vue, Angular) y cualquier librería adicional relevante (ej. manejo de estado, componentes UI).
-
 ---
 
-##  Créditos
+## Créditos
 
 **Equipo de desarrollo:**
-- Nombre//principalEncargadoDe
-- J.Josias Fernandez — Diseño UX/UI y Documentación
+- J. Josias Fernández — Diseño UX/UI y Documentación
 - Byron Jiménez Abarca — Frontend y Patrones UX
-- Nahomy Vargas Solis — Arquitectura, Mock Services y DevOps/CI-CD
+- Nahomy Vargas Solís — Arquitectura, Mock Services y DevOps/CI-CD
 
 **Curso:** Diseño de Software
 **Profesor:** Marcos Rodríguez
@@ -166,7 +182,7 @@ frontend/
 
 ---
 
-##  Documentación Adicional
+## Documentación Adicional
 
 - [Informe de Diseño UI/UX](./docs/Informe_Diseno_UIUX_Kleavers.docx)
 - [Documento Formal del Proyecto](./docs/Documento_Formal_Kleavers.docx)
