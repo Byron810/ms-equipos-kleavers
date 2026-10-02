@@ -43,7 +43,7 @@ Esta Fase I contempla una aplicación funcional **sin backend real**, utilizando
 ![Crear Evento](docs/screenshots/crearevento.png)
 
 ### Vista Móvil
-![Vista Móvil](docs/screenshots/mobile.jpeg)
+![Vista Móvil](docs/screenshots/movil.jpeg)
 
 ---
 
