@@ -33,10 +33,17 @@ Esta Fase I contempla una aplicación funcional **sin backend real**, utilizando
 
 ##  Capturas de Pantalla
 
-> ⚠️ **PENDIENTE — Responsable: Persona 2 (Frontend)**
-> Reemplazar esta sección con capturas reales de la aplicación ya desplegada (no del mockup de Figma). Se recomienda incluir al menos: Dashboard, Lista de Eventos, Crear Evento (paso con validación de disponibilidad), y la vista móvil. Formato sugerido:
->
-> `![Dashboard](docs/screenshots/dashboard.png)`
+### Dashboard
+![Dashboard](docs/screenshots/dashboard.png)
+
+### Lista de Eventos
+![Lista de Eventos](docs/screenshots/eventos.png)
+
+### Crear Evento — Validación de disponibilidad
+![Crear Evento](docs/screenshots/crearevento.png)
+
+### Vista Móvil
+![Vista Móvil](docs/screenshots/mobile.jpeg)
 
 ---
 
