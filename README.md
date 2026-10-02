@@ -148,7 +148,7 @@ frontend/
 ##  Créditos
 
 **Equipo de desarrollo:**
-- Nombre//principalEncargaodDe
+- Nombre//principalEncargadoDe
 - J.Josias Fernandez — Diseño UX/UI y Documentación
 - Byron Jiménez Abarca — Frontend y Patrones UX
 - Nahomy Vargas Solis — Arquitectura, Mock Services y DevOps/CI-CD
@@ -163,4 +163,4 @@ frontend/
 
 - [Informe de Diseño UI/UX](./docs/Informe_Diseno_UIUX_Kleavers.docx)
 - [Documento Formal del Proyecto](./docs/Documento_Formal_Kleavers.docx)
-- [Diagrama de Arquitectura (Draw.io)](./docs/diagrama-arquitectura.drawio.svg) · [Vista previa (PNG)](./docs/diagrama.png)
+- [Diagrama de Arquitectura (Draw.io)](./docs/diagrama/diagrama-arquitectura.drawio.svg) · [Vista previa (PNG)](./docs/diagrama/diagrama.png)
