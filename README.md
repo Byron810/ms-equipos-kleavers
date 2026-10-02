@@ -42,27 +42,43 @@ Esta Fase I contempla una aplicación funcional **sin backend real**, utilizando
 
 ##  Instrucciones de Despliegue Local
 
-> ⚠️ **PENDIENTE — Responsable: Persona 2 y Persona 3**
-> Completar con los pasos reales del proyecto. Guía de lo que debe incluir esta sección:
->
-> ```
-> 1. Clonar el repositorio
->    git clone [URL_DEL_REPO]
->
-> 2. Instalar dependencias
->    [comando real, ej. npm install]
->
-> 3. Configurar variables de entorno
->    [indicar qué variables son necesarias, ej. URL de Azure APIM, SIN incluir las llaves reales]
->
-> 4. Levantar el proyecto en local
->    [comando real, ej. npm run dev]
->
-> 5. Acceder en el navegador
->    [ej. http://localhost:3000]
-> ```
->
-> También indicar: versión de Node.js requerida, y cualquier dependencia externa necesaria (ej. CLI de Azure, Postman para probar los mocks).
+```
+1. Clonar el repositorio
+   git clone https://github.com/nahomyVargasS/ProyectoKleavers.git
+   cd ProyectoKleavers/frontend
+
+2. Instalar dependencias
+   npm install
+
+3. Configurar variables de entorno
+   Crear un archivo .env dentro de frontend/ con:
+   VITE_API_BASE_URL=https://kleavers-apim.azure-api.net/v1
+   VITE_GOOGLE_CLIENT_ID=838687610360-uq4qhudd7e639ttot4mev332m0rjkrf3.apps.googleusercontent.com
+
+4. Levantar el proyecto en local
+   npm run dev
+
+5. Acceder en el navegador
+   http://localhost:5173/
+```
+
+**Requisitos:** Node.js 18 o superior, npm.
+**Dependencias externas para pruebas:** Postman (para probar los endpoints de la APIM usando el token JWT de Google Auth como autorización).
+
+---
+
+##  Aplicación Desplegada
+
+- **URL de producción:** https://zealous-coast-0924c7910.6.azurestaticapps.net/
+- **Versión actual:** v0.0.0 
+
+---
+
+##  Estructura del Repositorio
+
+```
+(pegar aquí la salida real de: tree /F /A frontend\src, corrido desde la raíz del repo)
+```
 
 ---
 
@@ -78,23 +94,54 @@ Esta Fase I contempla una aplicación funcional **sin backend real**, utilizando
 
 ##  Estructura del Repositorio
 
-> ⚠️ **PENDIENTE — Responsable: Persona 3**
-> Reemplazar con el árbol real de carpetas del proyecto una vez esté organizado. Ejemplo de formato esperado:
->
-> ```
-> /
-> ├── .github/workflows/     # Pipelines de CI/CD (GitHub Actions)
-> ├── src/
-> │   ├── components/
-> │   ├── pages/
-> │   └── ...
-> ├── docs/
-> │   └── screenshots/
-> ├── mocks/                 # Definiciones de Mock Services (Azure APIM)
-> └── README.md
-> ```
-
----
+```
+frontend/
+├── src/
+│   ├── assets/
+│   │   ├── hero.png
+│   │   ├── react.svg
+│   │   └── vite.svg
+│   ├── components/
+│   │   ├── layout/
+│   │   │   ├── Footer.jsx
+│   │   │   ├── Header.jsx
+│   │   │   ├── Layout.jsx
+│   │   │   └── Sidebar.jsx
+│   │   ├── ui/
+│   │   │   ├── Badge.jsx
+│   │   │   ├── Button.jsx
+│   │   │   ├── Card.jsx
+│   │   │   ├── EmptyState.jsx
+│   │   │   ├── Input.jsx
+│   │   │   ├── Modal.jsx
+│   │   │   ├── Pagination.jsx
+│   │   │   └── Spinner.jsx
+│   │   └── ProtectedRoute.jsx
+│   ├── context/
+│   │   ├── AuthContext.jsx
+│   │   └── ThemeContext.jsx
+│   ├── hooks/
+│   │   └── useDebounce.js
+│   ├── pages/
+│   │   ├── Clientes.jsx
+│   │   ├── CrearEvento.jsx
+│   │   ├── Dashboard.jsx
+│   │   ├── DetalleEvento.jsx
+│   │   ├── Equipos.jsx
+│   │   ├── Eventos.jsx
+│   │   ├── Login.jsx
+│   │   └── NotFound.jsx
+│   ├── services/
+│   │   ├── api.js
+│   │   ├── clientesService.js
+│   │   ├── equiposService.js
+│   │   └── eventosService.js
+│   ├── App.jsx
+│   ├── App.css
+│   ├── main.jsx
+│   └── index.css
+└── package.json
+```
 
 ## 🛠️ Tecnologías y Herramientas Utilizadas
 
