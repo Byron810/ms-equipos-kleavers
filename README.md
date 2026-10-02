@@ -163,4 +163,4 @@ frontend/
 
 - [Informe de Diseño UI/UX](./docs/Informe_Diseno_UIUX_Kleavers.docx)
 - [Documento Formal del Proyecto](./docs/Documento_Formal_Kleavers.docx)
-- [Diagrama de Arquitectura (Draw.io)](./docs/diagrama-arquitectura.drawio) — *pendiente, Persona 3*
+- [Diagrama de Arquitectura (Draw.io)](./docs/diagrama-arquitectura.drawio.svg) · [Vista previa (PNG)](./docs/diagrama.png)
