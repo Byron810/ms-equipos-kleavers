@@ -47,3 +47,29 @@ jobs:
         with:
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_ZEALOUS_COAST_0924C7910 }}
           action: "close"
+
+    auto_tag_job:
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    name: Auto Tag Version
+    needs: build_and_deploy_job
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Leer versión de package.json
+        id: version
+        run: echo "version=$(node -p "require('./frontend/package.json').version")" >> $GITHUB_OUTPUT
+
+      - name: Crear tag si no existe
+        run: |
+          TAG="v${{ steps.version.outputs.version }}"
+          if git rev-parse "$TAG" >/dev/null 2>&1; then
+            echo "El tag $TAG ya existe, no se crea de nuevo."
+          else
+            git config user.name "github-actions"
+            git config user.email "github-actions@github.com"
+            git tag -a "$TAG" -m "Release $TAG"
+            git push origin "$TAG"
+          fi
