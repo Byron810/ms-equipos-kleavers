@@ -1,0 +1,16 @@
+C:\Users\cuent\OneDrive - Estudiantes ITCR\Diseño de Software\ProyectoKleavers\ms-equipos-dotnet\Kleavers.Equipos.Infrastructure\bin\Debug\net8.0\Kleavers.Equipos.Infrastructure.deps.json
+C:\Users\cuent\OneDrive - Estudiantes ITCR\Diseño de Software\ProyectoKleavers\ms-equipos-dotnet\Kleavers.Equipos.Infrastructure\bin\Debug\net8.0\Kleavers.Equipos.Infrastructure.dll
+C:\Users\cuent\OneDrive - Estudiantes ITCR\Diseño de Software\ProyectoKleavers\ms-equipos-dotnet\Kleavers.Equipos.Infrastructure\bin\Debug\net8.0\Kleavers.Equipos.Infrastructure.pdb
+C:\Users\cuent\OneDrive - Estudiantes ITCR\Diseño de Software\ProyectoKleavers\ms-equipos-dotnet\Kleavers.Equipos.Infrastructure\bin\Debug\net8.0\Kleavers.Equipos.Domain.dll
+C:\Users\cuent\OneDrive - Estudiantes ITCR\Diseño de Software\ProyectoKleavers\ms-equipos-dotnet\Kleavers.Equipos.Infrastructure\bin\Debug\net8.0\Kleavers.Equipos.Domain.pdb
+C:\Users\cuent\OneDrive - Estudiantes ITCR\Diseño de Software\ProyectoKleavers\ms-equipos-dotnet\Kleavers.Equipos.Infrastructure\obj\Debug\net8.0\Kleavers.Equipos.Infrastructure.csproj.AssemblyReference.cache
+C:\Users\cuent\OneDrive - Estudiantes ITCR\Diseño de Software\ProyectoKleavers\ms-equipos-dotnet\Kleavers.Equipos.Infrastructure\obj\Debug\net8.0\Kleavers.Equipos.Infrastructure.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\cuent\OneDrive - Estudiantes ITCR\Diseño de Software\ProyectoKleavers\ms-equipos-dotnet\Kleavers.Equipos.Infrastructure\obj\Debug\net8.0\Kleavers.Equipos.Infrastructure.AssemblyInfoInputs.cache
+C:\Users\cuent\OneDrive - Estudiantes ITCR\Diseño de Software\ProyectoKleavers\ms-equipos-dotnet\Kleavers.Equipos.Infrastructure\obj\Debug\net8.0\Kleavers.Equipos.Infrastructure.AssemblyInfo.cs
+C:\Users\cuent\OneDrive - Estudiantes ITCR\Diseño de Software\ProyectoKleavers\ms-equipos-dotnet\Kleavers.Equipos.Infrastructure\obj\Debug\net8.0\Kleavers.Equipos.Infrastructure.csproj.CoreCompileInputs.cache
+C:\Users\cuent\OneDrive - Estudiantes ITCR\Diseño de Software\ProyectoKleavers\ms-equipos-dotnet\Kleavers.Equipos.Infrastructure\obj\Debug\net8.0\Kleavers.Equipos.Infrastructure.sourcelink.json
+C:\Users\cuent\OneDrive - Estudiantes ITCR\Diseño de Software\ProyectoKleavers\ms-equipos-dotnet\Kleavers.Equipos.Infrastructure\obj\Debug\net8.0\Kleavers.D990993C.Up2Date
+C:\Users\cuent\OneDrive - Estudiantes ITCR\Diseño de Software\ProyectoKleavers\ms-equipos-dotnet\Kleavers.Equipos.Infrastructure\obj\Debug\net8.0\Kleavers.Equipos.Infrastructure.dll
+C:\Users\cuent\OneDrive - Estudiantes ITCR\Diseño de Software\ProyectoKleavers\ms-equipos-dotnet\Kleavers.Equipos.Infrastructure\obj\Debug\net8.0\refint\Kleavers.Equipos.Infrastructure.dll
+C:\Users\cuent\OneDrive - Estudiantes ITCR\Diseño de Software\ProyectoKleavers\ms-equipos-dotnet\Kleavers.Equipos.Infrastructure\obj\Debug\net8.0\Kleavers.Equipos.Infrastructure.pdb
+C:\Users\cuent\OneDrive - Estudiantes ITCR\Diseño de Software\ProyectoKleavers\ms-equipos-dotnet\Kleavers.Equipos.Infrastructure\obj\Debug\net8.0\ref\Kleavers.Equipos.Infrastructure.dll

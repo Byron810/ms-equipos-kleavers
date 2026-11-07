@@ -1,0 +1,12 @@
+C:\Users\cuent\OneDrive - Estudiantes ITCR\Diseño de Software\ProyectoKleavers\ms-equipos-dotnet\Kleavers.Equipos.Domain\bin\Debug\net8.0\Kleavers.Equipos.Domain.deps.json
+C:\Users\cuent\OneDrive - Estudiantes ITCR\Diseño de Software\ProyectoKleavers\ms-equipos-dotnet\Kleavers.Equipos.Domain\bin\Debug\net8.0\Kleavers.Equipos.Domain.dll
+C:\Users\cuent\OneDrive - Estudiantes ITCR\Diseño de Software\ProyectoKleavers\ms-equipos-dotnet\Kleavers.Equipos.Domain\bin\Debug\net8.0\Kleavers.Equipos.Domain.pdb
+C:\Users\cuent\OneDrive - Estudiantes ITCR\Diseño de Software\ProyectoKleavers\ms-equipos-dotnet\Kleavers.Equipos.Domain\obj\Debug\net8.0\Kleavers.Equipos.Domain.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\cuent\OneDrive - Estudiantes ITCR\Diseño de Software\ProyectoKleavers\ms-equipos-dotnet\Kleavers.Equipos.Domain\obj\Debug\net8.0\Kleavers.Equipos.Domain.AssemblyInfoInputs.cache
+C:\Users\cuent\OneDrive - Estudiantes ITCR\Diseño de Software\ProyectoKleavers\ms-equipos-dotnet\Kleavers.Equipos.Domain\obj\Debug\net8.0\Kleavers.Equipos.Domain.AssemblyInfo.cs
+C:\Users\cuent\OneDrive - Estudiantes ITCR\Diseño de Software\ProyectoKleavers\ms-equipos-dotnet\Kleavers.Equipos.Domain\obj\Debug\net8.0\Kleavers.Equipos.Domain.csproj.CoreCompileInputs.cache
+C:\Users\cuent\OneDrive - Estudiantes ITCR\Diseño de Software\ProyectoKleavers\ms-equipos-dotnet\Kleavers.Equipos.Domain\obj\Debug\net8.0\Kleavers.Equipos.Domain.sourcelink.json
+C:\Users\cuent\OneDrive - Estudiantes ITCR\Diseño de Software\ProyectoKleavers\ms-equipos-dotnet\Kleavers.Equipos.Domain\obj\Debug\net8.0\Kleavers.Equipos.Domain.dll
+C:\Users\cuent\OneDrive - Estudiantes ITCR\Diseño de Software\ProyectoKleavers\ms-equipos-dotnet\Kleavers.Equipos.Domain\obj\Debug\net8.0\refint\Kleavers.Equipos.Domain.dll
+C:\Users\cuent\OneDrive - Estudiantes ITCR\Diseño de Software\ProyectoKleavers\ms-equipos-dotnet\Kleavers.Equipos.Domain\obj\Debug\net8.0\Kleavers.Equipos.Domain.pdb
+C:\Users\cuent\OneDrive - Estudiantes ITCR\Diseño de Software\ProyectoKleavers\ms-equipos-dotnet\Kleavers.Equipos.Domain\obj\Debug\net8.0\ref\Kleavers.Equipos.Domain.dll

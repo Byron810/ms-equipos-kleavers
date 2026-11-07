@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="Kleavers.Equipos.API/Kleavers.Equipos.API.csproj" />
+  <Project Path="Kleavers.Equipos.Domain/Kleavers.Equipos.Domain.csproj" />
+  <Project Path="Kleavers.Equipos.Infrastructure/Kleavers.Equipos.Infrastructure.csproj" />
+</Solution>
