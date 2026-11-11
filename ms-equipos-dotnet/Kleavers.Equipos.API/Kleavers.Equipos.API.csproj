@@ -17,8 +17,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Kleavers.Equipos.Domain\Kleavers.Equipos.Domain.csproj" />
-    <ProjectReference Include="..\Kleavers.Equipos.Infrastructure\Kleavers.Equipos.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\Kleavers.Equipos.Infrastructure\Kleavers.Equipos.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\Kleavers.Equipos.Domain\Kleavers.Equipos.Domain.csproj" />
   </ItemGroup>
 
 </Project>

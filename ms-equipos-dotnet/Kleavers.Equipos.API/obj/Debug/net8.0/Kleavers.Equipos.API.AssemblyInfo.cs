@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Kleavers.Equipos.API")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+8be9efd092bc16ad6768fa40b58c78d0f71917c9")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+6213256294a1b2846ea199015a42ff6f438c6491")]
 [assembly: System.Reflection.AssemblyProductAttribute("Kleavers.Equipos.API")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Kleavers.Equipos.API")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

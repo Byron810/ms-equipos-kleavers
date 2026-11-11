@@ -43,11 +43,13 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
+// Habilitar Swagger en cualquier entorno (incluyendo producción en Azure App Service)
+app.UseSwagger();
+app.UseSwaggerUI(c =>
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Kleavers Equipos API v1");
+    c.RoutePrefix = string.Empty; // Hace que Swagger sea la página de inicio (https://kleavers-equipos-api.azurewebsites.net/)
+});
 
 // 3. Middlewares de seguridad en orden estricto
 app.UseAuthentication(); // Debe ir antes de UseAuthorization
