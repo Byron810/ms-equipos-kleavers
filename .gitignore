@@ -1,0 +1,10 @@
+## Binarios y temporales de .NET
+[Bb]in/
+[Oo]bj/
+publish/
+*.zip
+
+## Configuraciones locales de IDEs
+.vs/
+.vscode/
+*.user

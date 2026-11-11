@@ -1,0 +1,54 @@
+name: CI/CD Pipeline - Microservicio Equipos
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Obtener el código fuente del repositorio
+      - name: Checkout del código
+        uses: actions/checkout@v4
+
+      # 2. Configurar el SDK de .NET 8
+      - name: Configurar .NET 8 SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      # 3. Restaurar dependencias de la solución
+      - name: Restaurar paquetes NuGet
+        run: dotnet restore Kleavers.Equipos.API/Kleavers.Equipos.API.csproj
+
+      # 4. Compilar la API en modo Release
+      - name: Compilar proyecto
+        run: dotnet build Kleavers.Equipos.API/Kleavers.Equipos.API.csproj --configuration Release --no-restore
+
+      # 5. Publicar binarios optimizados para el entorno Linux de Azure
+      - name: Publicar binarios (.NET Publish)
+        run: |
+          dotnet publish Kleavers.Equipos.API/Kleavers.Equipos.API.csproj \
+            -c Release \
+            -r linux-x64 \
+            --no-self-contained \
+            -o ./publish
+
+      # 6. Empaquetar artefactos en ZIP
+      - name: Crear paquete ZIP
+        run: |
+          cd ./publish
+          zip -r ../publish.zip .
+          cd ..
+
+      # 7. Desplegar en Azure App Service usando el perfil de publicación
+      - name: Desplegar en Azure App Service
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: 'kleavers-equipos-api'
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+          package: './publish.zip'

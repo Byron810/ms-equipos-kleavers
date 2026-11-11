@@ -14,11 +14,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\cuent\\OneDrive - Estudiantes ITCR\\Diseño de Software\\ProyectoKleavers\\ms-equipos-dotnet\\Kleavers.Equipos.Domain\\Kleavers.Equipos.Domain.csproj",
+      "projectUniqueName": "C:\\Users\\cuent\\OneDrive - Estudiantes ITCR\\Diseño de Software\\ProyectoKleavers\\ms-equipos\\Kleavers.Equipos.Domain\\Kleavers.Equipos.Domain.csproj",
       "projectName": "Kleavers.Equipos.Domain",
-      "projectPath": "C:\\Users\\cuent\\OneDrive - Estudiantes ITCR\\Diseño de Software\\ProyectoKleavers\\ms-equipos-dotnet\\Kleavers.Equipos.Domain\\Kleavers.Equipos.Domain.csproj",
+      "projectPath": "C:\\Users\\cuent\\OneDrive - Estudiantes ITCR\\Diseño de Software\\ProyectoKleavers\\ms-equipos\\Kleavers.Equipos.Domain\\Kleavers.Equipos.Domain.csproj",
       "packagesPath": "C:\\Users\\cuent\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\cuent\\OneDrive - Estudiantes ITCR\\Diseño de Software\\ProyectoKleavers\\ms-equipos-dotnet\\Kleavers.Equipos.Domain\\obj\\",
+      "outputPath": "C:\\Users\\cuent\\OneDrive - Estudiantes ITCR\\Diseño de Software\\ProyectoKleavers\\ms-equipos\\Kleavers.Equipos.Domain\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

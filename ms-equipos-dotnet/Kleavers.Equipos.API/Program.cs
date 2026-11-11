@@ -2,10 +2,11 @@ using Kleavers.Equipos.Domain;
 using Kleavers.Equipos.Infrastructure;
 using Microsoft.AspNetCore.Authentication.Certificate;
 using Microsoft.EntityFrameworkCore;
+using Azure.Storage.Queues;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// 1. Configuración mTLS (Certificados Digitales) para la Fase II
+// 1. Configuración de mTLS (Certificados Digitales para APIM)
 builder.Services.AddAuthentication(CertificateAuthenticationDefaults.AuthenticationScheme)
     .AddCertificate(options =>
     {
@@ -14,8 +15,8 @@ builder.Services.AddAuthentication(CertificateAuthenticationDefaults.Authenticat
         {
             OnCertificateValidated = context =>
             {
-                // Reemplaza esto con el Thumbprint real configurado en Azure APIM por tu compañero de DevOps
-                var apimThumbprint = "THUMBPRINT_DEL_CERTIFICADO_APIM"; 
+                // Thumbprint temporal - se actualizará al configurar el APIM definitivo
+                var apimThumbprint = "THUMBPRINT_TEMPORAL_APIM"; 
 
                 if (context.ClientCertificate.Thumbprint.ToUpper() != apimThumbprint)
                 {
@@ -26,7 +27,7 @@ builder.Services.AddAuthentication(CertificateAuthenticationDefaults.Authenticat
         };
     });
 
-// 2. Base de Datos y Repositorios
+// 2. Configuración de PostgreSQL
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(
         builder.Configuration.GetConnectionString("PostgreSQLConnection"),
@@ -34,25 +35,36 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     )
 );
 
+// 3. Registrar el cliente de Azure Storage Queue para notificaciones
+builder.Services.AddSingleton(sp =>
+{
+    string connectionString = builder.Configuration.GetConnectionString("AzureQueueStorage") 
+                              ?? "UseDevelopmentStorage=true";
+    return new QueueClient(connectionString, "cola-notificaciones-equipos");
+});
+
+// 4. Inyección de dependencias Clean Architecture
 builder.Services.AddScoped<IEquipoRepository, EquipoRepository>();
 builder.Services.AddScoped<EquipoService>();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
+
+// Configuración de Swagger
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// Habilitar Swagger en cualquier entorno (incluyendo producción en Azure App Service)
+// Habilitar Swagger UI
 app.UseSwagger();
 app.UseSwaggerUI(c =>
 {
     c.SwaggerEndpoint("/swagger/v1/swagger.json", "Kleavers Equipos API v1");
-    c.RoutePrefix = string.Empty; // Hace que Swagger sea la página de inicio (https://kleavers-equipos-api.azurewebsites.net/)
+    c.RoutePrefix = string.Empty; // Swagger como landing page
 });
 
-// 3. Middlewares de seguridad en orden estricto
-app.UseAuthentication(); // Debe ir antes de UseAuthorization
+// Orden estricto de Middleware
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

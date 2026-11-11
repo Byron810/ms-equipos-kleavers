@@ -139,3 +139,9 @@ C:\Users\cuent\OneDrive - Estudiantes ITCR\Diseño de Software\ProyectoKleavers\
 C:\Users\cuent\OneDrive - Estudiantes ITCR\Diseño de Software\ProyectoKleavers\ms-equipos\ms-equipos-dotnet\Kleavers.Equipos.API\obj\Release\net8.0\Kleavers.Equipos.API.pdb
 C:\Users\cuent\OneDrive - Estudiantes ITCR\Diseño de Software\ProyectoKleavers\ms-equipos\ms-equipos-dotnet\Kleavers.Equipos.API\obj\Release\net8.0\Kleavers.Equipos.API.genruntimeconfig.cache
 C:\Users\cuent\OneDrive - Estudiantes ITCR\Diseño de Software\ProyectoKleavers\ms-equipos\ms-equipos-dotnet\Kleavers.Equipos.API\obj\Release\net8.0\ref\Kleavers.Equipos.API.dll
+C:\Users\cuent\OneDrive - Estudiantes ITCR\Diseño de Software\ProyectoKleavers\ms-equipos\ms-equipos-dotnet\Kleavers.Equipos.API\bin\Release\net8.0\publish\web.config
+C:\Users\cuent\OneDrive - Estudiantes ITCR\Diseño de Software\ProyectoKleavers\ms-equipos\ms-equipos-dotnet\Kleavers.Equipos.API\bin\Release\net8.0\publish\appsettings.Development.json
+C:\Users\cuent\OneDrive - Estudiantes ITCR\Diseño de Software\ProyectoKleavers\ms-equipos\ms-equipos-dotnet\Kleavers.Equipos.API\bin\Release\net8.0\publish\appsettings.json
+C:\Users\cuent\OneDrive - Estudiantes ITCR\Diseño de Software\ProyectoKleavers\ms-equipos\ms-equipos-dotnet\Kleavers.Equipos.API\bin\Release\net8.0\publish\Kleavers.Equipos.API.deps.json
+C:\Users\cuent\OneDrive - Estudiantes ITCR\Diseño de Software\ProyectoKleavers\ms-equipos\ms-equipos-dotnet\Kleavers.Equipos.API\bin\Release\net8.0\publish\Kleavers.Equipos.API.runtimeconfig.json
+C:\Users\cuent\OneDrive - Estudiantes ITCR\Diseño de Software\ProyectoKleavers\ms-equipos\ms-equipos-dotnet\Kleavers.Equipos.API\bin\Release\net8.0\publish\Kleavers.Equipos.API.staticwebassets.endpoints.json

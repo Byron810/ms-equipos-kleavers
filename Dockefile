@@ -1,0 +1,36 @@
+# 1. Imagen base para ejecución de la API en .NET 8
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
+WORKDIR /app
+EXPOSE 8080
+EXPOSE 8081
+
+# 2. Imagen de SDK para compilar y restaurar dependencias
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+ARG BUILD_CONFIGURATION=Release
+WORKDIR /src
+
+# Copiar archivos .csproj de cada capa para restaurar paquetes NuGet
+COPY ["Kleavers.Equipos.API/Kleavers.Equipos.API.csproj", "Kleavers.Equipos.API/"]
+COPY ["Kleavers.Equipos.Infrastructure/Kleavers.Equipos.Infrastructure.csproj", "Kleavers.Equipos.Infrastructure/"]
+COPY ["Kleavers.Equipos.Domain/Kleavers.Equipos.Domain.csproj", "Kleavers.Equipos.Domain/"]
+
+# Restaurar paquetes de la solución
+RUN dotnet restore "Kleavers.Equipos.API/Kleavers.Equipos.API.csproj"
+
+# Copiar todo el código fuente restante
+COPY . .
+WORKDIR "/src/Kleavers.Equipos.API"
+
+# Compilar la aplicación
+RUN dotnet build "Kleavers.Equipos.API.csproj" -c $BUILD_CONFIGURATION -o /app/build
+
+# 3. Publicación de binarios
+FROM build AS publish
+ARG BUILD_CONFIGURATION=Release
+RUN dotnet publish "Kleavers.Equipos.API.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+
+# 4. Imagen final de producción
+FROM base AS final
+WORKDIR /app
+COPY --from=publish /app/publish .
+ENTRYPOINT ["dotnet", "Kleavers.Equipos.API.dll"]
