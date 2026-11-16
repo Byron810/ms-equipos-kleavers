@@ -61,3 +61,75 @@ dotnet run
 ```
 
 3. Acceder a la documentación interactiva en `http://localhost:<puerto>/swagger`.
+
+## Servicio de Almacenamiento en Azure y Justificación
+
+De acuerdo con la arquitectura distribuida del sistema —donde cada microservicio integra un tipo de almacenamiento distinto en Azure (**Azure Database for PostgreSQL** en Equipos, **Azure SQL Database** en Eventos y **Azure Cosmos DB / Service Bus** en Notificaciones)—[cite: 3, 6], este microservicio utiliza:
+
+| Servicio en Azure | Tipo | Uso en `ms-equipos` | Justificación Técnica |
+| :--- | :--- | :--- | :--- |
+| **Azure Database for PostgreSQL** (`kleavers-equipos-db`) | Relacional (SQL) | Persistencia del inventario (`Equipos`) y reservas por fecha (`Reservas`). | Garantiza integridad transaccional ACID y permite aplicar bloqueo pesimista a nivel de fila (`SELECT ... FOR UPDATE`), evitando sobre-reservas cuando múltiples solicitudes intentan apartar el mismo equipo en una misma fecha[cite: 5, 6]. |
+
+### Evidencia en Portal de Azure
+* **Servidor PostgreSQL Flexible Server (`kleavers-equipos-db`):
+{
+    "sku": {
+        "name": "Standard_B1ms",
+        "tier": "Burstable"
+    },
+    "systemData": {
+        "createdAt": "2026-11-04T03:54:23.2225973Z"
+    },
+    "properties": {
+        "replica": {
+            "role": "Primary",
+            "capacity": 5
+        },
+        "storage": {
+            "type": "Premium_LRS",
+            "iops": 120,
+            "tier": "P4",
+            "storageSizeGB": 32,
+            "autoGrow": "Disabled"
+        },
+        "network": {
+            "publicNetworkAccess": "Enabled"
+        },
+        "privateEndpointConnections": [],
+        "dataEncryption": {
+            "type": "SystemManaged"
+        },
+        "authConfig": {
+            "activeDirectoryAuth": "Disabled",
+            "passwordAuth": "Enabled"
+        },
+        "fullyQualifiedDomainName": "kleavers-equipos-db.postgres.database.azure.com",
+        "version": "18",
+        "minorVersion": "6",
+        "administratorLogin": "kleavers_admin",
+        "state": "Ready",
+        "availabilityZone": "2",
+        "backup": {
+            "backupRetentionDays": 7,
+            "geoRedundantBackup": "Disabled",
+            "earliestRestoreDate": "2026-11-10T04:12:40.0852501+00:00"
+        },
+        "highAvailability": {
+            "mode": "Disabled",
+            "state": "NotEnabled"
+        },
+        "maintenanceWindow": {
+            "customWindow": "Disabled",
+            "dayOfWeek": 0,
+            "startHour": 0,
+            "startMinute": 0
+        },
+        "replicationRole": "Primary",
+        "replicaCapacity": 5
+    },
+    "location": "Chile Central",
+    "tags": {},
+    "id": "/subscriptions/d58246db-9d73-40e5-8b6d-bde8e093ad59/resourceGroups/rg-kleavers/providers/Microsoft.DBforPostgreSQL/flexibleServers/kleavers-equipos-db",
+    "name": "kleavers-equipos-db",
+    "type": "Microsoft.DBforPostgreSQL/flexibleServers"
+}
