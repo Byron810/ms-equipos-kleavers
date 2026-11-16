@@ -46,13 +46,55 @@ namespace Kleavers.Equipos.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("Nombre")
+                    b.Property<string>("NombreEquipo")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<decimal>("PrecioAlquiler")
+                        .HasColumnType("numeric");
 
                     b.HasKey("Id");
 
                     b.ToTable("Equipos");
+                });
+
+            modelBuilder.Entity("Kleavers.Equipos.Domain.Reserva", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("Cantidad")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("EquipoId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("EventoId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<long>("FechaEpochMs")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EquipoId");
+
+                    b.ToTable("Reservas");
+                });
+
+            modelBuilder.Entity("Kleavers.Equipos.Domain.Reserva", b =>
+                {
+                    b.HasOne("Kleavers.Equipos.Domain.Equipo", "Equipo")
+                        .WithMany()
+                        .HasForeignKey("EquipoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Equipo");
                 });
 #pragma warning restore 612, 618
         }

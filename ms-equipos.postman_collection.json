@@ -1,0 +1,421 @@
+{
+  "info": {
+    "_postman_id": "f4a1b2c3-9876-4321-abcd-112233445566",
+    "name": "Microservicio Equipos - Kleavers (Fase II Completa)",
+    "description": "Colección ejecutable con pruebas automatizadas para CRUD, reservas transaccionales por evento y disponibilidad por fecha.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://kleavers-equipos-api.azurewebsites.net/v1",
+      "type": "string"
+    },
+    {
+      "key": "jwtToken",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "equipoId",
+      "value": "1",
+      "type": "string"
+    },
+    {
+      "key": "eventoPruebaId",
+      "value": "evento-postman-999",
+      "type": "string"
+    },
+    {
+      "key": "fechaPruebaEpoch",
+      "value": "1795000000000",
+      "type": "string"
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "const token = pm.variables.get('jwtToken');",
+          "if (token && token.trim() !== '') {",
+          "    pm.request.headers.upsert({ key: 'Authorization', value: 'Bearer ' + token.trim() });",
+          "}"
+        ]
+      }
+    }
+  ],
+  "item": [
+    {
+      "name": "1. Crear Equipo (POST)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code es 201 Created', function () {",
+              "    pm.response.to.have.status(201);",
+              "});",
+              "pm.test('Devuelve equipo creado con ID y estado Disponible', function () {",
+              "    const json = pm.response.json();",
+              "    pm.expect(json).to.have.property('id');",
+              "    pm.expect(json.nombreEquipo).to.eql('Equipo Prueba Postman');",
+              "    pm.expect(json.estado).to.eql('Disponible');",
+              "    pm.collectionVariables.set('equipoId', json.id);",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nombreEquipo\": \"Equipo Prueba Postman\",\n  \"categoria\": \"Audio\",\n  \"cantidadTotal\": 10,\n  \"precioAlquiler\": 25000.00\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/equipos",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "equipos"
+          ]
+        }
+      }
+    },
+    {
+      "name": "2. Listar Equipos Paginado (GET)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code es 200 OK', function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "pm.test('Cumple contrato de paginación (totalRecords, page, pageSize, items)', function () {",
+              "    const json = pm.response.json();",
+              "    pm.expect(json).to.have.property('totalRecords');",
+              "    pm.expect(json).to.have.property('page', 1);",
+              "    pm.expect(json).to.have.property('pageSize', 10);",
+              "    pm.expect(json.items).to.be.an('array');",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/equipos?page=1&pageSize=10",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "equipos"
+          ],
+          "query": [
+            {
+              "key": "page",
+              "value": "1"
+            },
+            {
+              "key": "pageSize",
+              "value": "10"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "3. Obtener Equipo por ID (GET)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code es 200 OK', function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "pm.test('Devuelve el equipo consultado por ID', function () {",
+              "    const json = pm.response.json();",
+              "    pm.expect(json.id).to.eql(Number(pm.collectionVariables.get('equipoId')));",
+              "    pm.expect(json).to.have.property('precioAlquiler');",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/equipos/{{equipoId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "equipos",
+            "{{equipoId}}"
+          ]
+        }
+      }
+    },
+    {
+      "name": "4. Actualizar Equipo (PATCH)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code es 200 OK', function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "pm.test('Actualiza el precio de alquiler', function () {",
+              "    const json = pm.response.json();",
+              "    pm.expect(json.precioAlquiler).to.eql(30000);",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"precioAlquiler\": 30000.00\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/equipos/{{equipoId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "equipos",
+            "{{equipoId}}"
+          ]
+        }
+      }
+    },
+    {
+      "name": "5. Reservar Equipos por Evento (PUT)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code es 200 OK', function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "pm.test('Devuelve items reservados con precioAlquiler y cantidad', function () {",
+              "    const json = pm.response.json();",
+              "    pm.expect(json).to.have.property('items');",
+              "    pm.expect(json.items).to.be.an('array').with.lengthOf(1);",
+              "    pm.expect(json.items[0].cantidad).to.eql(4);",
+              "    pm.expect(json.items[0].precioAlquiler).to.eql(30000);",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"fecha\": {{fechaPruebaEpoch}},\n  \"items\": [\n    {\n      \"equipoId\": {{equipoId}},\n      \"cantidad\": 4\n    }\n  ]\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/equipos/reservas/{{eventoPruebaId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "equipos",
+            "reservas",
+            "{{eventoPruebaId}}"
+          ]
+        }
+      }
+    },
+    {
+      "name": "6. Validar Conflicto de Stock por Fecha (PUT 409)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code es 409 Conflict cuando no alcanza el stock', function () {",
+              "    pm.response.to.have.status(409);",
+              "});",
+              "pm.test('Incluye mensaje descriptivo del conflicto', function () {",
+              "    const json = pm.response.json();",
+              "    pm.expect(json).to.have.property('message');",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"fecha\": {{fechaPruebaEpoch}},\n  \"items\": [\n    {\n      \"equipoId\": {{equipoId}},\n      \"cantidad\": 999\n    }\n  ]\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/equipos/reservas/evento-conflicto-test",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "equipos",
+            "reservas",
+            "evento-conflicto-test"
+          ]
+        }
+      }
+    },
+    {
+      "name": "7. Consultar Disponibilidad por Fecha (GET disponibleEn)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code es 200 OK', function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "pm.test('Resta correctamente las 4 unidades reservadas ese día (10 - 4 = 6)', function () {",
+              "    const json = pm.response.json();",
+              "    const eq = json.items.find(i => i.id === Number(pm.collectionVariables.get('equipoId')));",
+              "    pm.expect(eq).to.not.be.undefined;",
+              "    pm.expect(eq.cantidadDisponible).to.eql(6);",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/equipos?page=1&pageSize=50&disponibleEn={{fechaPruebaEpoch}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "equipos"
+          ],
+          "query": [
+            {
+              "key": "page",
+              "value": "1"
+            },
+            {
+              "key": "pageSize",
+              "value": "50"
+            },
+            {
+              "key": "disponibleEn",
+              "value": "{{fechaPruebaEpoch}}"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "8. Liberar Reserva de Evento (DELETE)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code es 204 No Content', function () {",
+              "    pm.response.to.have.status(204);",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/equipos/reservas/{{eventoPruebaId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "equipos",
+            "reservas",
+            "{{eventoPruebaId}}"
+          ]
+        }
+      }
+    },
+    {
+      "name": "9. Eliminar Equipo de Prueba (DELETE)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code es 204 No Content', function () {",
+              "    pm.response.to.have.status(204);",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/equipos/{{equipoId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "equipos",
+            "{{equipoId}}"
+          ]
+        }
+      }
+    }
+  ]
+}

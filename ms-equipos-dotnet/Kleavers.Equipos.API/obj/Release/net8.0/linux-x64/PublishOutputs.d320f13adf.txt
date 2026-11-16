@@ -45,4 +45,5 @@ C:\Users\cuent\OneDrive - Estudiantes ITCR\Diseño de Software\ProyectoKleavers\
 C:\Users\cuent\OneDrive - Estudiantes ITCR\Diseño de Software\ProyectoKleavers\ms-equipos\ms-equipos-dotnet\Kleavers.Equipos.API\publish\Kleavers.Equipos.Infrastructure.dll
 C:\Users\cuent\OneDrive - Estudiantes ITCR\Diseño de Software\ProyectoKleavers\ms-equipos\ms-equipos-dotnet\Kleavers.Equipos.API\publish\Kleavers.Equipos.Infrastructure.pdb
 C:\Users\cuent\OneDrive - Estudiantes ITCR\Diseño de Software\ProyectoKleavers\ms-equipos\ms-equipos-dotnet\Kleavers.Equipos.API\publish\Kleavers.Equipos.Domain.pdb
+C:\Users\cuent\OneDrive - Estudiantes ITCR\Diseño de Software\ProyectoKleavers\ms-equipos\ms-equipos-dotnet\Kleavers.Equipos.API\publish\Kleavers.Equipos.API.xml
 C:\Users\cuent\OneDrive - Estudiantes ITCR\Diseño de Software\ProyectoKleavers\ms-equipos\ms-equipos-dotnet\Kleavers.Equipos.API\publish\Kleavers.Equipos.API.deps.json

@@ -83,6 +83,11 @@
           },
           "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.301/PortableRuntimeIdentifierGraph.json"
         }
+      },
+      "runtimes": {
+        "linux-x64": {
+          "#import": []
+        }
       }
     },
     "C:\\Users\\cuent\\OneDrive - Estudiantes ITCR\\Diseño de Software\\ProyectoKleavers\\ms-equipos\\Kleavers.Equipos.Infrastructure\\Kleavers.Equipos.Infrastructure.csproj": {
@@ -186,6 +191,11 @@
           },
           "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.301/PortableRuntimeIdentifierGraph.json"
         }
+      },
+      "runtimes": {
+        "linux-x64": {
+          "#import": []
+        }
       }
     },
     "C:\\Users\\cuent\\OneDrive - Estudiantes ITCR\\Diseño de Software\\ProyectoKleavers\\ms-equipos\\ms-equipos-dotnet\\Kleavers.Equipos.API\\Kleavers.Equipos.API.csproj": {
@@ -279,7 +289,7 @@
               "version": "[8.0.28, 8.0.28]"
             },
             {
-              "name": "Microsoft.NETCore.App.Host.win-x64",
+              "name": "Microsoft.NETCore.App.Host.linux-x64",
               "version": "[8.0.28, 8.0.28]"
             },
             {
@@ -300,6 +310,11 @@
             }
           },
           "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.301/PortableRuntimeIdentifierGraph.json"
+        }
+      },
+      "runtimes": {
+        "linux-x64": {
+          "#import": []
         }
       }
     }

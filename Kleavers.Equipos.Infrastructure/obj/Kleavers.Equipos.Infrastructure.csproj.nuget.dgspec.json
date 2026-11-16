@@ -83,6 +83,11 @@
           },
           "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.301/PortableRuntimeIdentifierGraph.json"
         }
+      },
+      "runtimes": {
+        "linux-x64": {
+          "#import": []
+        }
       }
     },
     "C:\\Users\\cuent\\OneDrive - Estudiantes ITCR\\Diseño de Software\\ProyectoKleavers\\ms-equipos\\Kleavers.Equipos.Infrastructure\\Kleavers.Equipos.Infrastructure.csproj": {
@@ -185,6 +190,11 @@
             }
           },
           "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.301/PortableRuntimeIdentifierGraph.json"
+        }
+      },
+      "runtimes": {
+        "linux-x64": {
+          "#import": []
         }
       }
     }
